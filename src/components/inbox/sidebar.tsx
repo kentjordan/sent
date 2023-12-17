@@ -5,11 +5,13 @@ import { Input } from "../ui/input";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { IChat } from "./types";
+import { IPrivateMessage } from "./types";
 import useGlobalStore from "@/zustand/store.global";
 
 const SideBar = () => {
-  const [chats, setChats] = useState<IChat[]>([]);
+  const [chatPrivateMessages, setChatPrivateMessages] = useState<
+    IPrivateMessage[]
+  >([]);
   const user = useGlobalStore((state) => state.user);
 
   const access_token = useGlobalStore((state) => state.access_token);
@@ -33,7 +35,7 @@ const SideBar = () => {
           },
         })
         .then((res) => {
-          setChats(res.data);
+          setChatPrivateMessages(res.data);
         });
     });
 
@@ -44,7 +46,7 @@ const SideBar = () => {
         },
       })
       .then((res) => {
-        setChats(res.data);
+        setChatPrivateMessages(res.data);
       });
   }, []);
 
@@ -62,8 +64,10 @@ const SideBar = () => {
         <RiChatNewLine size={32} className='mx-4 cursor-pointer' />
       </div>
       <div className='flex flex-col my-2'>
-        {chats.map((chat: IChat, i) => {
-          return <SidebarChat key={chat.chat_id} {...chat} />;
+        {chatPrivateMessages.map((private_message: IPrivateMessage, i) => {
+          return (
+            <SidebarChat key={private_message.chat_id} {...private_message} />
+          );
         })}
       </div>
     </div>

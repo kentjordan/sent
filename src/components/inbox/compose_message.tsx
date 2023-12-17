@@ -32,8 +32,6 @@ const ComposeMessage = () => {
   const active_chat = useGlobalStore((state) => state.active_chat);
 
   useEffect(() => {
-    console.log(active_chat.friend_id);
-
     socket = io(process.env.WS_GATEWAY_CHAT as string, {
       auth: {
         user_id: user.id as string,
@@ -43,7 +41,7 @@ const ComposeMessage = () => {
 
     const init = async () => {
       socket.on("receive_message", async (data: any) => {
-        const res = await axios.get(
+        const res = await axios.get<IMessage[]>(
           `http://localhost:3001/private-message/${active_chat.chat_id}`
         );
         setMessages(res.data);

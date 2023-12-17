@@ -25,7 +25,7 @@ let socket: Socket;
 const ComposeMessage = () => {
   const textLineHieght = 24;
   const [composeInputHeight, setComposeInputHeight] = useState(textLineHieght);
-  const { handleSubmit, register } = useForm<{ message: string }>();
+  const { handleSubmit, register, reset } = useForm<{ message: string }>();
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   const user = useGlobalStore((state) => state.user);
@@ -94,6 +94,7 @@ const ComposeMessage = () => {
               user1_id: active_chat.friend_id,
             })
           );
+          reset();
         })}
         className='flex items-center p-4'>
         <RiImageAddFill size={34} className='cursor-pointer' />

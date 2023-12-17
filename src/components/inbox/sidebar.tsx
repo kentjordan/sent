@@ -52,8 +52,9 @@ const SideBar = () => {
 
   return (
     <div className='h-full max-w-[20rem] min-w-[20rem]'>
-      <div className='p-4'>
+      <div className='flex justify-between items-center p-4'>
         <h1 className='text-2xl font-bold'>Messages</h1>
+        <RiChatNewLine size={24} className='mx-4 cursor-pointer' />
       </div>
       <div className=' w-full flex justify-center items-center p-4'>
         <Input
@@ -61,7 +62,6 @@ const SideBar = () => {
           className='w-full'
           placeholder='Search chat...'
         />
-        <RiChatNewLine size={32} className='mx-4 cursor-pointer' />
       </div>
       <div className='flex flex-col my-2'>
         {chatPrivateMessages.map((private_message: IPrivateMessage, i) => {

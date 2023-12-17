@@ -80,7 +80,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
         </h1>
         <span className={isSeen ? "font-normal" : "font-bold"}>
           {user.id === privateMessage.friend_id ? "You: " : ""}{" "}
-          {privateMessage.message}
+          {privateMessage.message.slice(0, 28)}...
         </span>
       </div>
       {isSeen ? null : (

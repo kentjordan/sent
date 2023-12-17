@@ -51,7 +51,7 @@ const SideBar = () => {
   }, []);
 
   return (
-    <div className='flex-[0.4]  h-full max-w-lg'>
+    <div className='h-full max-w-[20rem] min-w-[20rem]'>
       <div className='p-4'>
         <h1 className='text-2xl font-bold'>Messages</h1>
       </div>

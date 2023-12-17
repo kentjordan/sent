@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useLayoutEffect, useState } from "react";
-import { IPrivateMessage } from "./types";
+import { IPrivateMessage } from "../types";
 import useGlobalStore from "@/zustand/store.global";
 import axios from "axios";
 import { io } from "socket.io-client";

@@ -1,11 +1,11 @@
 "use client";
 import { RiChatNewLine } from "react-icons/ri";
-import SidebarChat from "./sidebar_chat";
-import { Input } from "../ui/input";
+import SidebarChat from "./chat";
+import { Input } from "../../ui/input";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { IPrivateMessage } from "./types";
+import { IPrivateMessage } from "../types";
 import useGlobalStore from "@/zustand/store.global";
 
 const SideBar = () => {
@@ -54,7 +54,7 @@ const SideBar = () => {
     <div className='h-full max-w-[20rem] min-w-[20rem]'>
       <div className='flex justify-between items-center p-4'>
         <h1 className='text-2xl font-bold'>Messages</h1>
-        <RiChatNewLine size={24} className='mx-4 cursor-pointer' />
+        <RiChatNewLine size={24} className='cursor-pointer' />
       </div>
       <div className=' w-full flex justify-center items-center p-4'>
         <Input

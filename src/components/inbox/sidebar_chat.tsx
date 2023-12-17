@@ -1,14 +1,42 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { IPrivateMessage } from "./types";
 import useGlobalStore from "@/zustand/store.global";
 import axios from "axios";
+import { io } from "socket.io-client";
 
 const SidebarChat = (privateMessage: IPrivateMessage) => {
-  const [isSeen, setIsSeen] = useState(privateMessage.is_seen);
+  const [isSeen, setIsSeen] = useState(true);
   const setActiveChat = useGlobalStore((state) => state.setActiveChat);
   const user = useGlobalStore((state) => state.user);
+  const access_token = useGlobalStore((state) => state.access_token);
+
+  useLayoutEffect(() => {
+    const checkSeenStatus = async () => {
+      const res = await axios.get<
+        { user_id: string; private_message_id: string }[]
+      >(`${process.env.API_HOSTNAME}/seen/${privateMessage.id}`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      setIsSeen(res.data.length > 0);
+    };
+
+    const socket = io(process.env.WS_GATEWAY_INBOX as string, {
+      auth: {
+        user_id: user.id as string,
+      },
+    });
+
+    socket.on("inbox", () => {
+      checkSeenStatus();
+    });
+
+    checkSeenStatus();
+  }, []);
 
   return (
     <div
@@ -20,6 +48,23 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
           last_name: privateMessage.last_name,
           friend_id: privateMessage.friend_id,
         });
+
+        const seenMessage = async () => {
+          await axios.post(
+            `${process.env.API_HOSTNAME}/seen/${privateMessage.id}`,
+            {
+              user_id: user.id,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${access_token}`,
+              },
+            }
+          );
+          setIsSeen(true);
+        };
+
+        seenMessage();
       }}
       className='flex p-2 cursor-pointer items-center'>
       <Image

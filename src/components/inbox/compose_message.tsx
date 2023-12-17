@@ -67,7 +67,7 @@ const ComposeMessage = () => {
 
   return (
     <div className='flex-1 flex flex-col w-full max-h-screen'>
-      <div className='bg-white w-full shadow-md p-8'>
+      <div className='bg-white w-full shadow-md p-4'>
         <h1 className='text-2xl font-bold'>
           {active_chat.first_name} {active_chat.last_name}
         </h1>

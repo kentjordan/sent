@@ -29,7 +29,7 @@ const SideBar = () => {
 
     socket.on("inbox", (data) => {
       axios
-        .get(`http://localhost:3001/private-message/latest`, {
+        .get(`${process.env.API_HOSTNAME}/private-message/latest`, {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
@@ -40,7 +40,7 @@ const SideBar = () => {
     });
 
     axios
-      .get(`http://localhost:3001/private-message/latest`, {
+      .get(`${process.env.API_HOSTNAME}/private-message/latest`, {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
@@ -65,9 +65,7 @@ const SideBar = () => {
       </div>
       <div className='flex flex-col my-2'>
         {chatPrivateMessages.map((private_message: IPrivateMessage, i) => {
-          return (
-            <SidebarChat key={private_message.chat_id} {...private_message} />
-          );
+          return <SidebarChat key={private_message.id} {...private_message} />;
         })}
       </div>
     </div>

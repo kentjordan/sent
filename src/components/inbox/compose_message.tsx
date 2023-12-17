@@ -42,14 +42,14 @@ const ComposeMessage = () => {
     const init = async () => {
       socket.on("receive_message", async (data: any) => {
         const res = await axios.get<IMessage[]>(
-          `http://localhost:3001/private-message/${active_chat.chat_id}`
+          `${process.env.API_HOSTNAME}/private-message/${active_chat.chat_id}`
         );
         setMessages(res.data);
       });
 
       // Initialize messages on UI
       const res = await axios.get(
-        `http://localhost:3001/private-message/${active_chat.chat_id}`
+        `${process.env.API_HOSTNAME}/private-message/${active_chat.chat_id}`
       );
       setMessages(res.data);
     };

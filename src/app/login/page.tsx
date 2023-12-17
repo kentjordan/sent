@@ -29,7 +29,7 @@ const LoginPage = () => {
 
   const { error, mutateAsync, isPending } = useMutation({
     mutationFn: async (credentials: PostLoginDto) =>
-      axios.post("http://localhost:3001/auth/login", credentials, {
+      axios.post(`${"http://192.168.0.105:3001"}/auth/login`, credentials, {
         withCredentials: true,
       }),
     onSuccess(data: AxiosResponse<{ access_token: string }>) {
@@ -46,7 +46,9 @@ const LoginPage = () => {
 
       if (error instanceof AxiosError) {
         if (error.code === "ERR_NETWORK") {
-          alert("Server is down or on maintenance");
+          alert(
+            "Can't reach the server. It might have an on-going maintenance."
+          );
         }
       }
     },

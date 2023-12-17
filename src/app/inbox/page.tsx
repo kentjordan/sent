@@ -23,7 +23,7 @@ const InboxPage = () => {
     const refreshToken = async () => {
       try {
         const refreshedTokens = await axios.patch(
-          "http://localhost:3001/auth/refresh",
+          `${process.env.API_HOSTNAME}/auth/refresh`,
           undefined,
           { withCredentials: true }
         );

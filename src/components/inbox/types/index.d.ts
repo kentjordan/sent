@@ -7,5 +7,4 @@ export interface IPrivateMessage {
     first_name: string;
     last_name: string;
     message: string;
-    is_seen: null | string
 }

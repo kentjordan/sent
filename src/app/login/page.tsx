@@ -31,7 +31,7 @@ const LoginPage = () => {
 
   const { error, mutateAsync, isPending } = useMutation({
     mutationFn: async (credentials: PostLoginDto) =>
-      axios.post(`${"http://192.168.0.105:3001"}/auth/login`, credentials, {
+      axios.post(`${process.env.API_HOSTNAME}/auth/login`, credentials, {
         withCredentials: true,
       }),
     onSuccess(data: AxiosResponse<{ access_token: string }>) {

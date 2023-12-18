@@ -54,7 +54,14 @@ const InboxPage = () => {
           <SidebarMenu />
           <SideBar />
           <div className='h-full bg-stone-200 w-[1px]'></div>
-          {active_chat.is_visible && <ComposeMessage />}
+
+          {active_chat.is_visible ? (
+            <ComposeMessage />
+          ) : (
+            <div className='flex justify-center items-center h-full bg-white w-full'>
+              <h1 className='text-lg'>No selected chat yet</h1>
+            </div>
+          )}
         </div>
       )}
     </>

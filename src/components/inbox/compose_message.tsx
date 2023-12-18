@@ -30,6 +30,7 @@ const ComposeMessage = () => {
 
   const user = useGlobalStore((state) => state.user);
   const active_chat = useGlobalStore((state) => state.active_chat);
+  const access_token = useGlobalStore((state) => state.access_token);
 
   useEffect(() => {
     socket = io(process.env.WS_GATEWAY_CHAT as string, {
@@ -42,14 +43,24 @@ const ComposeMessage = () => {
     const init = async () => {
       socket.on("receive_message", async (data: any) => {
         const res = await axios.get<IMessage[]>(
-          `${process.env.API_HOSTNAME}/private-message/${active_chat.chat_id}`
+          `${process.env.API_HOSTNAME}/private-message/chat/${active_chat.friend_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
         );
         setMessages(res.data);
       });
 
       // Initialize messages on UI
       const res = await axios.get(
-        `${process.env.API_HOSTNAME}/private-message/${active_chat.chat_id}`
+        `${process.env.API_HOSTNAME}/private-message/chat/${active_chat.friend_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
       );
       setMessages(res.data);
     };
@@ -67,7 +78,7 @@ const ComposeMessage = () => {
 
   return (
     <div className='flex-1 flex flex-col w-full max-h-screen'>
-      <div className='bg-white w-full shadow-md p-4'>
+      <div className='flex justify-center bg-white w-full border-b p-4'>
         <h1 className='text-2xl font-bold'>
           {active_chat.first_name} {active_chat.last_name}
         </h1>
@@ -97,7 +108,7 @@ const ComposeMessage = () => {
           reset();
         })}
         className='flex items-center p-4'>
-        <RiImageAddFill size={34} className='cursor-pointer' />
+        {/* <RiImageAddFill size={34} className='cursor-pointer' /> */}
         <div className='flex-1 mx-4'>
           <Textarea
             {...register("message")}
@@ -119,7 +130,7 @@ const ComposeMessage = () => {
             className='resize-none wrap'
           />
         </div>
-        <button className='flex justify-center items-center font-bold bg-slate-800 rounded-full text-white cursor-pointer'>
+        <button className='flex justify-center items-center font-bold  text-slate-800 cursor-pointer'>
           <TbSend className='m-4' size={34} />
         </button>
       </form>

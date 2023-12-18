@@ -81,8 +81,6 @@ const NewMessage = () => {
                     }
                   );
 
-                  console.log(res.data);
-
                   setActiveChat({
                     is_visible: true,
                     chat_id: res.data.chat_id,

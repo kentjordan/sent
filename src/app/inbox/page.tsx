@@ -8,6 +8,7 @@ import { useLayoutEffect } from "react";
 import { IUserJWT } from "@/zustand/types";
 import axios, { AxiosError } from "axios";
 import * as jwt from "jsonwebtoken";
+import SidebarMenu from "@/components/inbox/sidebar_menu";
 
 const InboxPage = () => {
   const setUser = useGlobalStore((state) => state.setUser);
@@ -50,6 +51,7 @@ const InboxPage = () => {
     <>
       {access_token && (
         <div className='flex h-screen'>
+          <SidebarMenu />
           <SideBar />
           <div className='h-full bg-stone-200 w-[1px]'></div>
           {active_chat.is_visible && <ComposeMessage />}

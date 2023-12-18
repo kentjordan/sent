@@ -18,7 +18,7 @@ type PostLoginDto = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
   const setTokens = useGlobalStore(
-    (state: IGlobalState) => state.setAccessToken
+    (state: IGlobalState) => state.setAccessToken,
   );
   const setUser = useGlobalStore((state) => state.setUser);
 
@@ -48,7 +48,7 @@ const LoginPage = () => {
       if (error instanceof AxiosError) {
         if (error.code === "ERR_NETWORK") {
           alert(
-            "Can't reach the server. It might have an on-going maintenance."
+            "Can't reach the server. It might have an on-going maintenance.",
           );
         }
       }
@@ -56,69 +56,70 @@ const LoginPage = () => {
   });
 
   return (
-    <div className='flex w-screen h-screen items-center'>
-      <div className='flex-[0.5] bg-slate-800 w-full h-full flex flex-col justify-center items-center text-white'>
-        <h1 className='text-4xl font-bold my-2'>Sent!</h1>
-        <span className='text-stone-300 my-2 text-sm text-center'>
+    <div className="flex h-screen w-screen items-center">
+      <div className="hidden h-full w-full flex-[0.5] flex-col items-center justify-center bg-slate-800 text-white sm:flex">
+        <h1 className="my-2 text-4xl font-bold">Sent!</h1>
+        <span className="my-2 text-center text-sm text-stone-300">
           An open source messaging app.
         </span>
       </div>
-      <div className='flex items-center flex-col p-2 flex-1'>
-        <div>
-          <h1 className='font-bold text-2xl my-4 mx-2'>Login</h1>
+      <div className="flex flex-1 flex-col items-center p-2">
+        <div className="w-full max-w-md">
+          <h1 className="mx-2 my-4 text-2xl font-bold">Login</h1>
           <form
             onSubmit={handleSubmit(async (data: PostLoginDto) => {
               try {
                 await mutateAsync(data);
               } catch (error) {}
             })}
-            className='w-full max-w-lg flex flex-col items-center'>
+            className="flex flex-col items-center"
+          >
             <Input
               {...register("email", { required: true })}
-              className='w-96 m-2'
-              placeholder='Email'
+              className="m-2 w-full"
+              placeholder="Email"
             />
             <Input
               {...register("password", { required: true })}
-              className='w-96 m-2'
-              type='password'
-              placeholder='Password'
+              className="m-2 w-full"
+              type="password"
+              placeholder="Password"
             />
-            <div className='flex w-full'>
+            <div className="flex w-full">
               {isSuccess ? (
-                <Button disabled className='w-full m-2'>
-                  <PulseLoader color='white' size={8} />
+                <Button disabled className="my-4 w-full">
+                  <PulseLoader color="white" size={8} />
                 </Button>
               ) : (
-                <Button type='submit' className='w-full m-2'>
+                <Button type="submit" className="my-4 w-full">
                   Submit
                 </Button>
               )}
             </div>
-            <div className='my-2 w-full flex justify-start'>
-              <span className='text-sm m-2'>
+            <div className="my-2 flex w-full justify-start">
+              <span className="m-2 text-sm">
                 Don't have an account?{" "}
-                <Link className='font-bold' href='/register'>
+                <Link className="font-bold" href="/register">
                   Register here.
                 </Link>
               </span>
             </div>
           </form>
           {error instanceof AxiosError && error.code !== "ERR_NETWORK" && (
-            <div className='bg-red-100/50 m-2 p-2 rounded'>
-              <ul className='text-red-700'>
-                <li className='text-xs my-2 font-bold text-center'>
+            <div className="m-2 rounded bg-red-100/50 p-2">
+              <ul className="text-red-700">
+                <li className="my-2 text-center text-xs font-bold">
                   {error.response?.data.message}
                 </li>
               </ul>
             </div>
           )}
           {Object.entries(errors).length > 0 && (
-            <div className='bg-red-100/50 m-2 p-2 rounded'>
-              <ul className='text-red-700'>
+            <div className="m-2 rounded bg-red-100/50 p-2">
+              <ul className="text-red-700">
                 {Object.entries(errors).map((e, i) => {
                   return (
-                    <li key={i} className='text-xs my-2'>
+                    <li key={i} className="my-2 text-xs">
                       * <b>{e[0].toUpperCase()}</b>: {`${e[1]?.message}`}{" "}
                     </li>
                   );
@@ -127,7 +128,7 @@ const LoginPage = () => {
             </div>
           )}
         </div>
-        <span className='absolute bottom-0 my-8 text-sm text-stone-500 text-center'>
+        <span className="absolute bottom-0 my-8 text-center text-sm text-stone-500">
           Made by Kent Jordan with 💖
         </span>
       </div>

@@ -59,22 +59,23 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
               headers: {
                 Authorization: `Bearer ${access_token}`,
               },
-            }
+            },
           );
           setIsSeen(true);
         };
 
         seenMessage();
       }}
-      className='flex p-2 cursor-pointer items-center'>
+      className="my-2 flex w-full cursor-pointer items-center justify-center px-2 sm:justify-start"
+    >
       <Image
         width={40}
         height={40}
-        alt='profile photo'
+        alt="profile photo"
         src={"https://picsum.photos/56/56"}
-        className='rounded-full h-12 w-12 m-2'
+        className="m-2 h-12 w-12 rounded-full"
       />
-      <div className='flex flex-col justify-center mx-2 flex-1'>
+      <div className="mx-2 hidden flex-col justify-center text-sm sm:flex">
         <h1 className={isSeen ? "font-normal" : "font-bold"}>
           {privateMessage.first_name} {privateMessage.last_name}
         </h1>
@@ -85,7 +86,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
         </span>
       </div>
       {isSeen ? null : (
-        <div className='bg-slate-700 w-4 h-4 rounded-full mx-4'></div>
+        <div className="mx-4 h-4 w-4 rounded-full bg-slate-700"></div>
       )}
     </div>
   );

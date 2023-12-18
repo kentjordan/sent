@@ -26,7 +26,7 @@ const InboxPage = () => {
         const refreshedTokens = await axios.patch(
           `${process.env.API_HOSTNAME}/auth/refresh`,
           undefined,
-          { withCredentials: true }
+          { withCredentials: true },
         );
 
         const { access_token } = refreshedTokens.data;
@@ -50,16 +50,19 @@ const InboxPage = () => {
   return (
     <>
       {access_token && (
-        <div className='flex h-screen'>
+        <div className="flex h-screen">
           <SidebarMenu />
           <SideBar />
-          <div className='h-full bg-stone-200 w-[1px]'></div>
+          <div className="h-full w-[1px] bg-stone-200"></div>
 
           {active_chat.is_visible ? (
             <ComposeMessage />
           ) : (
-            <div className='flex justify-center items-center h-full bg-white w-full'>
-              <h1 className='text-lg'>No selected chat yet</h1>
+            <div className="relative flex h-full w-full flex-col items-center justify-center bg-white">
+              <h1 className="text-center font-bold">No selected chat</h1>
+              <span className="absolute bottom-0 m-2 text-center text-sm text-stone-500">
+                Made by Kent Jordan
+              </span>
             </div>
           )}
         </div>

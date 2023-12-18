@@ -6,8 +6,10 @@ import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { IPrivateMessage } from "../types";
-import useGlobalStore from "@/zustand/store.global";
+import useGlobalStore, { initial_state } from "@/zustand/store.global";
 import NewMessage from "./new_message";
+import { useRouter } from "next/navigation";
+import { CiLogout } from "react-icons/ci";
 
 const SideBar = () => {
   const [chatPrivateMessages, setChatPrivateMessages] = useState<
@@ -15,7 +17,7 @@ const SideBar = () => {
   >([]);
   const user = useGlobalStore((state) => state.user);
   const is_new_message_visible = useGlobalStore(
-    (state) => state.is_new_message_visible
+    (state) => state.is_new_message_visible,
   );
   const toggleNewMessage = useGlobalStore((state) => state.toggleNewMessage);
   const access_token = useGlobalStore((state) => state.access_token);
@@ -54,16 +56,22 @@ const SideBar = () => {
       });
   }, []);
 
+  const router = useRouter();
+  const resetState = useGlobalStore((state) => state.resetState);
+
   return (
-    <div className='h-full max-w-[20rem] min-w-[20rem]'>
+    <div className="relative flex h-full flex-col items-start md:min-w-[20rem] md:max-w-[20rem]">
       {is_new_message_visible ? (
         <NewMessage />
       ) : (
         <>
-          <div className='flex justify-between items-center p-4'>
-            <h1 className='text-2xl font-bold'>Messages</h1>
-            <div onClick={toggleNewMessage}>
-              <RiChatNewLine size={24} className='cursor-pointer' />
+          <div className="flex w-full items-center justify-between p-4">
+            <h1 className="hidden text-2xl font-bold sm:flex">Messages</h1>
+            <div
+              className="flex w-full justify-center sm:justify-end"
+              onClick={toggleNewMessage}
+            >
+              <RiChatNewLine size={24} className="cursor-pointer" />
             </div>
           </div>
           {/* <div className=' w-full flex justify-center items-center p-4'>
@@ -74,13 +82,13 @@ const SideBar = () => {
             />
           </div> */}
           {chatPrivateMessages.length <= 0 ? (
-            <div className='h-full w-full justify-center items-center flex mt-[-64px]'>
-              <span className='text-sm'>Click</span>
-              <RiChatNewLine size={24} className='cursor-pointer mx-2' />
-              <span className='text-sm'>above to start messaging</span>
+            <div className="mt-[-64px] flex h-full w-full items-center justify-center">
+              <span className="text-sm">Click</span>
+              <RiChatNewLine size={24} className="mx-2 cursor-pointer" />
+              <span className="text-sm">above to start messaging</span>
             </div>
           ) : (
-            <div className='flex flex-col my-2'>
+            <div className="my-2 flex w-full flex-col items-start">
               {chatPrivateMessages.map(
                 (private_message: IPrivateMessage, i) => {
                   return (
@@ -89,12 +97,27 @@ const SideBar = () => {
                       {...private_message}
                     />
                   );
-                }
+                },
               )}
             </div>
           )}
         </>
       )}
+      <div
+        onClick={() => {
+          const logout = async () => {
+            resetState(initial_state);
+            await axios.get(`${process.env.API_HOSTNAME}/auth/logout`, {
+              withCredentials: true,
+            });
+            router.replace("/login");
+          };
+          logout();
+        }}
+        className="absolute bottom-0 flex w-full cursor-pointer flex-col items-center justify-center bg-stone-100 py-4 sm:hidden"
+      >
+        <CiLogout size={32} />
+      </div>
     </div>
   );
 };

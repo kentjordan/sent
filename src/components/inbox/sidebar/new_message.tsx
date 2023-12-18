@@ -21,14 +21,14 @@ const NewMessage = () => {
   const access_token = useGlobalStore((state) => state.access_token);
 
   return (
-    <div className='h-full w-full p-4'>
-      <div className='flex items-center justify-between'>
-        <h1 className='text-2xl font-bold'>New Message</h1>
+    <div className="h-full w-full p-4">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">New Message</h1>
         <div onClick={toggleNewMessage}>
-          <IoClose className='cursor-pointer' size={24} />
+          <IoClose className="cursor-pointer" size={24} />
         </div>
       </div>
-      <div className=' w-full flex justify-center items-center my-8'>
+      <div className=" my-8 flex w-full items-center justify-center">
         <Input
           onInput={(target) => {
             const q = target.currentTarget.value;
@@ -41,22 +41,22 @@ const NewMessage = () => {
             const findPerson = async () => {
               setIsSearching(true);
               const res = await axios.get(
-                `${process.env.API_HOSTNAME}/users/search?q=${q}`
+                `${process.env.API_HOSTNAME}/users/search?q=${q}`,
               );
               setFounderUsers(res.data);
               setIsSearching(false);
             };
             findPerson();
           }}
-          id='search_chat'
-          className='w-full'
-          placeholder='Find person (email or name)'
+          id="search_chat"
+          className="w-full"
+          placeholder="Find person (email or name)"
         />
       </div>
-      <div className='flex justify-center items-center w-full min-h-[12px]'>
+      <div className="flex min-h-[12px] w-full items-center justify-center">
         {isSearching && <PulseLoader size={8} />}
       </div>
-      <div className='flex flex-col w-full'>
+      <div className="flex w-full flex-col">
         {foundUsers.map((e, i) => {
           return (
             <div
@@ -78,7 +78,7 @@ const NewMessage = () => {
                       headers: {
                         Authorization: `Bearer ${access_token}`,
                       },
-                    }
+                    },
                   );
 
                   setActiveChat({
@@ -93,15 +93,16 @@ const NewMessage = () => {
                 }
               }}
               key={e.id}
-              className='flex items-center justify-start my-2 p-2 flex-1 cursor-pointer '>
+              className="my-2 flex flex-1 cursor-pointer items-center justify-start p-2 "
+            >
               <Image
                 width={40}
                 height={40}
-                alt='profile photo'
+                alt="profile photo"
                 src={"https://picsum.photos/56/56"}
-                className='rounded-full h-12 w-12'
+                className="h-12 w-12 rounded-full"
               />
-              <h1 className='font-normal mx-4'>
+              <h1 className="mx-4 font-normal">
                 {e.first_name} {e.last_name}
               </h1>
             </div>

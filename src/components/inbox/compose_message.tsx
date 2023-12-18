@@ -48,7 +48,7 @@ const ComposeMessage = () => {
             headers: {
               Authorization: `Bearer ${access_token}`,
             },
-          }
+          },
         );
         setMessages(res.data);
       });
@@ -60,7 +60,7 @@ const ComposeMessage = () => {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
-        }
+        },
       );
       setMessages(res.data);
     };
@@ -77,15 +77,16 @@ const ComposeMessage = () => {
   }, [messages]);
 
   return (
-    <div className='flex-1 flex flex-col w-full max-h-screen'>
-      <div className='flex justify-center bg-white w-full border-b p-4'>
-        <h1 className='text-2xl font-bold'>
+    <div className="flex max-h-screen w-full flex-1 flex-col">
+      <div className="flex w-full justify-center border-b bg-white p-4">
+        <h1 className="text-lg font-bold">
           {active_chat.first_name} {active_chat.last_name}
         </h1>
       </div>
       <div
-        id='compose_message'
-        className='flex flex-col p-2 overflow-y-scroll h-full scroll-smooth'>
+        id="compose_message"
+        className="flex h-full flex-col overflow-y-scroll scroll-smooth p-2"
+      >
         {messages
           .map((e, i) => {
             const position = e.user0_id !== user.id ? "start" : "end";
@@ -103,16 +104,18 @@ const ComposeMessage = () => {
               ...data,
               user0_id: user.id,
               user1_id: active_chat.friend_id,
-            })
+            }),
           );
           reset();
         })}
-        className='flex items-center p-4'>
+        className="flex items-center p-4"
+      >
         {/* <RiImageAddFill size={34} className='cursor-pointer' /> */}
-        <div className='flex-1 mx-4'>
+        <div className="flex-1">
           <Textarea
             {...register("message")}
-            placeholder='Type your message here...'
+            className="wrap resize-none p-2 text-sm"
+            placeholder="Type your message here..."
             onChange={(target) => {
               const height = target.currentTarget.scrollHeight;
 
@@ -127,11 +130,10 @@ const ComposeMessage = () => {
             style={{
               height: composeInputHeight,
             }}
-            className='resize-none wrap'
           />
         </div>
-        <button className='flex justify-center items-center font-bold  text-slate-800 cursor-pointer'>
-          <TbSend className='m-4' size={34} />
+        <button className="flex cursor-pointer items-center justify-center  font-bold text-slate-800">
+          <TbSend className="m-2" size={28} />
         </button>
       </form>
     </div>

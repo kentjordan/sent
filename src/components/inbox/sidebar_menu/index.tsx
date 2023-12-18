@@ -12,11 +12,11 @@ const SidebarMenu = () => {
   const resetState = useGlobalStore((state) => state.resetState);
 
   return (
-    <div className='h-full w-16 bg-stone-50 flex flex-col justify-between p-4'>
-      <div className='flex justify-center flex-col items-center'>
+    <div className="hidden h-full w-16 flex-col justify-between bg-stone-50 p-4 sm:flex">
+      <div className="flex flex-col items-center justify-center">
         {/* <IoPersonCircleOutline className='mb-6 cursor-pointer' size={32} /> */}
-        <div className='p-2 bg-stone-200 mb-6 cursor-pointer rounded-lg'>
-          <BiMessageRounded color='black' size={32} />
+        <div className="mb-6 cursor-pointer rounded-lg bg-stone-200 p-2">
+          <BiMessageRounded color="black" size={32} />
         </div>
       </div>
       <div
@@ -30,7 +30,8 @@ const SidebarMenu = () => {
           };
           logout();
         }}
-        className='flex justify-center flex-col items-center cursor-pointer'>
+        className="flex cursor-pointer flex-col items-center justify-center"
+      >
         <CiLogout size={32} />
       </div>
     </div>

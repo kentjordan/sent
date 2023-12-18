@@ -3,7 +3,7 @@ export interface IGlobalState {
     active_chat: IActiveChat,
     is_new_message_visible: boolean;
     setActiveChat: (active_chat: IActiveChat) => void;
-    setTokens: (tokens: ITokens) => void
+    setAccessToken: (token: string) => void
     user: IUserJWT
     setUser: (user: IUserJWT) => void
     toggleNewMessage: () => void

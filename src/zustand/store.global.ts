@@ -17,7 +17,7 @@ const useGlobalStore = create<IGlobalState>((set) => ({
         id: undefined
     },
     is_new_message_visible: false,
-    setTokens: (access_token: string) => {
+    setAccessToken: (access_token: string) => {
         set((state: IGlobalState) => ({
             ...state,
             access_token

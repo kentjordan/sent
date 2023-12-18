@@ -11,7 +11,7 @@ import * as jwt from "jsonwebtoken";
 
 const InboxPage = () => {
   const setUser = useGlobalStore((state) => state.setUser);
-  const setTokens = useGlobalStore((state) => state.setTokens);
+  const setAccessToken = useGlobalStore((state) => state.setAccessToken);
   const access_token = useGlobalStore((state) => state.access_token);
 
   const setActiveChat = useGlobalStore((state) => state.setActiveChat);
@@ -31,7 +31,7 @@ const InboxPage = () => {
         const { access_token } = refreshedTokens.data;
         const user = jwt.decode(access_token) as IUserJWT;
 
-        setTokens(access_token);
+        setAccessToken(access_token);
         setUser(user);
       } catch (error: unknown) {
         if (error instanceof AxiosError) {

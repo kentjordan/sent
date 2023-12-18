@@ -16,7 +16,9 @@ import * as jwt from "jsonwebtoken";
 type PostLoginDto = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
-  const setTokens = useGlobalStore((state: IGlobalState) => state.setTokens);
+  const setTokens = useGlobalStore(
+    (state: IGlobalState) => state.setAccessToken
+  );
   const setUser = useGlobalStore((state) => state.setUser);
 
   const router = useRouter();
@@ -42,8 +44,6 @@ const LoginPage = () => {
       router.replace("/inbox");
     },
     onError(error) {
-      console.log(error);
-
       if (error instanceof AxiosError) {
         if (error.code === "ERR_NETWORK") {
           alert(

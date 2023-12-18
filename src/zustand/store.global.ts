@@ -16,6 +16,7 @@ const useGlobalStore = create<IGlobalState>((set) => ({
         exp: undefined,
         id: undefined
     },
+    is_new_message_visible: false,
     setTokens: (access_token: string) => {
         set((state: IGlobalState) => ({
             ...state,
@@ -33,6 +34,14 @@ const useGlobalStore = create<IGlobalState>((set) => ({
             ...state,
             active_chat
         }));
+    },
+    toggleNewMessage() {
+        set((state: IGlobalState) => {
+            return {
+                ...state,
+                is_new_message_visible: !state.is_new_message_visible
+            }
+        })
     }
 }));
 

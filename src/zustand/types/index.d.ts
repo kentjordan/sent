@@ -7,6 +7,7 @@ export interface IGlobalState {
     user: IUserJWT
     setUser: (user: IUserJWT) => void
     toggleNewMessage: () => void
+    resetState: (initial_state: IInitialState) => void
 }
 
 export interface IUserJWT {
@@ -22,4 +23,11 @@ export interface IActiveChat {
     last_name: string,
     friend_id: string | undefined
     message_id?: string | undefined
+}
+
+export interface IInitialState {
+    access_token: undefined,
+    active_chat: IActiveChat,
+    user: IUserJWT,
+    is_new_message_visible: boolean
 }

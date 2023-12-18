@@ -2,14 +2,14 @@
 import { BiMessageRounded } from "react-icons/bi";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
-import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import useGlobalStore from "@/zustand/store.global";
 import axios from "axios";
+import { initial_state } from "@/zustand/store.global";
 
 const SidebarMenu = () => {
   const router = useRouter();
-  const setAccessToken = useGlobalStore((state) => state.setAccessToken);
+  const resetState = useGlobalStore((state) => state.resetState);
 
   return (
     <div className='h-full w-16 bg-stone-50 flex flex-col justify-between p-4'>
@@ -22,7 +22,7 @@ const SidebarMenu = () => {
       <div
         onClick={() => {
           const logout = async () => {
-            setAccessToken(undefined);
+            resetState(initial_state);
             await axios.get(`${process.env.API_HOSTNAME}/auth/logout`, {
               withCredentials: true,
             });

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import { IActiveChat, IGlobalState, IUserJWT } from './types';
+import { IActiveChat, IGlobalState, IInitialState, IUserJWT } from './types';
 
-const useGlobalStore = create<IGlobalState>((set) => ({
+export const initial_state: IInitialState = {
     access_token: undefined,
     active_chat: {
         is_visible: false,
@@ -16,8 +16,12 @@ const useGlobalStore = create<IGlobalState>((set) => ({
         exp: undefined,
         id: undefined
     },
-    is_new_message_visible: false,
-    setAccessToken: (access_token: string) => {
+    is_new_message_visible: false
+}
+
+const useGlobalStore = create<IGlobalState>((set) => ({
+    ...initial_state,
+    setAccessToken: (access_token: string | undefined) => {
         set((state: IGlobalState) => ({
             ...state,
             access_token
@@ -42,6 +46,9 @@ const useGlobalStore = create<IGlobalState>((set) => ({
                 is_new_message_visible: !state.is_new_message_visible
             }
         })
+    },
+    resetState(initial_state: IInitialState) {
+        set((state: IGlobalState) => initial_state);
     }
 }));
 

@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import useRegisterAccount from "../hooks/useRegister";
 import PulseLoader from "react-spinners/PulseLoader";
+import Link from "next/link";
 
 const RegisterPage = () => {
   const {
@@ -22,7 +23,7 @@ const RegisterPage = () => {
 
   const router = useRouter();
 
-  const { mutateAsync, isPending } =
+  const { mutateAsync, isSuccess } =
     useRegisterAccount<z.infer<typeof registerSchema>>(router);
 
   return (
@@ -124,7 +125,7 @@ const RegisterPage = () => {
             </div>
 
             <div className='flex w-full'>
-              {isPending ? (
+              {isSuccess ? (
                 <Button disabled className='w-full m-2'>
                   <PulseLoader color='white' size={8} />
                 </Button>
@@ -132,7 +133,14 @@ const RegisterPage = () => {
                 <Button className='w-full m-2'>Submit</Button>
               )}
             </div>
-
+            <div className='my-2 w-full flex justify-start'>
+              <span className='text-sm m-2'>
+                Have got an account?{" "}
+                <Link className='font-bold' href='/login'>
+                  Login here.
+                </Link>
+              </span>
+            </div>
             <span className='absolute bottom-0 my-8 text-sm text-stone-500 text-center'>
               Made by Kent Jordan with 💖
             </span>

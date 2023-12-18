@@ -66,20 +66,33 @@ const SideBar = () => {
               <RiChatNewLine size={24} className='cursor-pointer' />
             </div>
           </div>
-          <div className=' w-full flex justify-center items-center p-4'>
+          {/* <div className=' w-full flex justify-center items-center p-4'>
             <Input
               id='search_chat'
               className='w-full'
               placeholder='Search chat...'
             />
-          </div>
-          <div className='flex flex-col my-2'>
-            {chatPrivateMessages.map((private_message: IPrivateMessage, i) => {
-              return (
-                <SidebarChat key={private_message.id} {...private_message} />
-              );
-            })}
-          </div>
+          </div> */}
+          {chatPrivateMessages.length <= 0 ? (
+            <div className='h-full w-full justify-center items-center flex mt-[-64px]'>
+              <span className='text-sm'>Click</span>
+              <RiChatNewLine size={24} className='cursor-pointer mx-2' />
+              <span className='text-sm'>above to start messaging</span>
+            </div>
+          ) : (
+            <div className='flex flex-col my-2'>
+              {chatPrivateMessages.map(
+                (private_message: IPrivateMessage, i) => {
+                  return (
+                    <SidebarChat
+                      key={private_message.id}
+                      {...private_message}
+                    />
+                  );
+                }
+              )}
+            </div>
+          )}
         </>
       )}
     </div>

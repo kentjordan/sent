@@ -11,12 +11,12 @@ const API_PROTOCOL = setVariable({
 
 const REST_HOSTNAME = setVariable({
   dev: "localhost:3001",
-  prod: "13.215.30.232/rest",
+  prod: "kentjordan.xyz/rest",
 });
 
 const WS_HOSTNAME = setVariable({
   dev: "localhost:3500",
-  prod: "13.215.30.232/ws",
+  prod: "kentjordan.xyz/ws",
 });
 
 const nextConfig = {

@@ -6,7 +6,7 @@ const setVariable = ({ prod, dev }) => {
 
 const API_PROTOCOL = setVariable({
   dev: "http",
-  prod: "https",
+  prod: "http",
 });
 
 const REST_HOSTNAME = setVariable({

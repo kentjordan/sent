@@ -83,7 +83,7 @@ const SideBar = () => {
             />
           </div> */}
           {chatPrivateMessages.length <= 0 ? (
-            <div className="justify-cente  mt-[-64px] flex h-full w-full flex-wrap items-center px-2">
+            <div className="mt-[-64px]  flex h-full w-full flex-wrap items-center justify-center px-2">
               <span className="text-center text-xs">
                 Click
                 <RiChatNewLine

@@ -66,12 +66,13 @@ const SideBar = () => {
       ) : (
         <>
           <div className="flex w-full items-center justify-between p-4">
-            <h1 className="hidden text-2xl font-bold sm:flex">Messages</h1>
-            <div
-              className="flex w-full justify-center sm:justify-end"
-              onClick={toggleNewMessage}
-            >
-              <RiChatNewLine size={24} className="cursor-pointer" />
+            <h1 className="hidden font-bold sm:flex sm:text-2xl">Messages</h1>
+            <div className="z-10 flex w-full justify-center sm:justify-end">
+              <RiChatNewLine
+                onClick={toggleNewMessage}
+                size={24}
+                className="ml-4 cursor-pointer"
+              />
             </div>
           </div>
           {/* <div className=' w-full flex justify-center items-center p-4'>
@@ -82,10 +83,15 @@ const SideBar = () => {
             />
           </div> */}
           {chatPrivateMessages.length <= 0 ? (
-            <div className="mt-[-64px] flex h-full w-full items-center justify-center">
-              <span className="text-sm">Click</span>
-              <RiChatNewLine size={24} className="mx-2 cursor-pointer" />
-              <span className="text-sm">above to start messaging</span>
+            <div className="justify-cente  mt-[-64px] flex h-full w-full flex-wrap items-center px-2">
+              <span className="text-center text-xs">
+                Click
+                <RiChatNewLine
+                  size={18}
+                  className="mx-2 inline-block cursor-pointer text-stone-500"
+                />
+                above to start messaging
+              </span>
             </div>
           ) : (
             <div className="my-2 flex w-full flex-col items-start">

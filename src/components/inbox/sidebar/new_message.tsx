@@ -23,13 +23,16 @@ const NewMessage = () => {
   return (
     <div className="h-full w-full p-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">New Message</h1>
+        <h1 className="text-md font-bold sm:text-2xl">New Message</h1>
         <div onClick={toggleNewMessage}>
           <IoClose className="cursor-pointer" size={24} />
         </div>
       </div>
       <div className=" my-8 flex w-full items-center justify-center">
         <Input
+          id="search_chat"
+          className="w-full text-sm"
+          placeholder="Find person (email or name)"
           onInput={(target) => {
             const q = target.currentTarget.value;
 
@@ -48,9 +51,6 @@ const NewMessage = () => {
             };
             findPerson();
           }}
-          id="search_chat"
-          className="w-full"
-          placeholder="Find person (email or name)"
         />
       </div>
       <div className="flex min-h-[12px] w-full items-center justify-center">

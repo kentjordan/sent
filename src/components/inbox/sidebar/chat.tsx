@@ -40,6 +40,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
 
   return (
     <div
+      className="bg-red relative my-3 flex w-full cursor-pointer items-center justify-start sm:justify-between"
       onClick={() => {
         setActiveChat({
           is_visible: true,
@@ -66,27 +67,28 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
 
         seenMessage();
       }}
-      className="my-2 flex w-full cursor-pointer items-center justify-center px-2 sm:justify-start"
     >
-      <Image
-        width={40}
-        height={40}
-        alt="profile photo"
-        src={"https://picsum.photos/56/56"}
-        className="m-2 h-12 w-12 rounded-full"
-      />
-      <div className="mx-2 hidden flex-col justify-center text-sm sm:flex">
-        <h1 className={isSeen ? "font-normal" : "font-bold"}>
-          {privateMessage.first_name} {privateMessage.last_name}
-        </h1>
-        <span className={isSeen ? "font-normal" : "font-bold"}>
-          {user.id === privateMessage.friend_id ? "You: " : ""}{" "}
-          {privateMessage.message.slice(0, 28)}
-          {privateMessage.message.length >= 28 ? "..." : ""}
-        </span>
+      <div className="flex">
+        <Image
+          width={40}
+          height={40}
+          alt="profile photo"
+          src={"https://picsum.photos/56/56"}
+          className="min-h-[3rem] min-w-[3rem] rounded-full"
+        />
+        <div className="mx-4 hidden flex-col justify-center text-sm sm:flex">
+          <h1 className={isSeen ? "font-normal" : "font-bold"}>
+            {privateMessage.first_name} {privateMessage.last_name}
+          </h1>
+          <span className={isSeen ? "font-normal" : "font-bold"}>
+            {user.id === privateMessage.friend_id ? "You: " : ""}{" "}
+            {privateMessage.message.slice(0, 28)}
+            {privateMessage.message.length >= 28 ? "..." : ""}
+          </span>
+        </div>
       </div>
       {isSeen ? null : (
-        <div className="mx-4 h-4 w-4 rounded-full bg-slate-700"></div>
+        <div className="ml-3 h-3 w-3 rounded-full bg-slate-700 sm:flex"></div>
       )}
     </div>
   );

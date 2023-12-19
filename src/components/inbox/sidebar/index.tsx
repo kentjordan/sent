@@ -60,18 +60,18 @@ const SideBar = () => {
   const resetState = useGlobalStore((state) => state.resetState);
 
   return (
-    <div className="relative flex h-full flex-col items-start md:min-w-[20rem] md:max-w-[20rem]">
+    <div className="relative flex h-full flex-col items-start p-0 sm:p-4 md:min-w-[20rem] md:max-w-[20rem]">
       {is_new_message_visible ? (
         <NewMessage />
       ) : (
         <>
-          <div className="flex w-full items-center justify-between p-4">
-            <h1 className="hidden font-bold sm:flex sm:text-2xl">Messages</h1>
+          <div className="mb-8 flex w-full items-center justify-between p-4 sm:py-0">
+            <h1 className="hidden font-bold sm:flex sm:text-xl">Messages</h1>
             <div className="z-10 flex w-full justify-center sm:justify-end">
               <RiChatNewLine
                 onClick={toggleNewMessage}
                 size={24}
-                className="ml-4 cursor-pointer"
+                className="cursor-pointer"
               />
             </div>
           </div>
@@ -94,7 +94,7 @@ const SideBar = () => {
               </span>
             </div>
           ) : (
-            <div className="my-2 flex w-full flex-col items-start">
+            <div className="flex w-full flex-col items-start px-2">
               {chatPrivateMessages.map(
                 (private_message: IPrivateMessage, i) => {
                   return (
@@ -107,23 +107,23 @@ const SideBar = () => {
               )}
             </div>
           )}
+          <div
+            onClick={() => {
+              const logout = async () => {
+                resetState(initial_state);
+                await axios.get(`${process.env.API_HOSTNAME}/auth/logout`, {
+                  withCredentials: true,
+                });
+                router.replace("/login");
+              };
+              logout();
+            }}
+            className="absolute bottom-0 flex w-full cursor-pointer flex-col items-center justify-center bg-stone-200 py-4 sm:hidden"
+          >
+            <CiLogout size={24} />
+          </div>
         </>
       )}
-      <div
-        onClick={() => {
-          const logout = async () => {
-            resetState(initial_state);
-            await axios.get(`${process.env.API_HOSTNAME}/auth/logout`, {
-              withCredentials: true,
-            });
-            router.replace("/login");
-          };
-          logout();
-        }}
-        className="absolute bottom-0 flex w-full cursor-pointer flex-col items-center justify-center bg-stone-100 py-4 sm:hidden"
-      >
-        <CiLogout size={32} />
-      </div>
     </div>
   );
 };

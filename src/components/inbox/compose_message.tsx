@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Textarea } from "../ui/textarea";
 import { TbSend } from "react-icons/tb";
@@ -31,6 +31,7 @@ const ComposeMessage = () => {
   const user = useGlobalStore((state) => state.user);
   const active_chat = useGlobalStore((state) => state.active_chat);
   const access_token = useGlobalStore((state) => state.access_token);
+  const form_message = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     socket = io(process.env.WS_GATEWAY_CHAT as string, {
@@ -97,16 +98,19 @@ const ComposeMessage = () => {
           .reverse()}
       </div>
       <form
+        ref={form_message}
         onSubmit={handleSubmit((data) => {
-          socket.emit(
-            "send-private-message",
-            JSON.stringify({
-              ...data,
-              user0_id: user.id,
-              user1_id: active_chat.friend_id,
-            }),
-          );
-          reset();
+          if (data.message.trim().length > 0) {
+            socket.emit(
+              "send-private-message",
+              JSON.stringify({
+                ...data,
+                user0_id: user.id,
+                user1_id: active_chat.friend_id,
+              }),
+            );
+            reset();
+          }
         })}
         className="flex items-center p-4"
       >
@@ -115,16 +119,39 @@ const ComposeMessage = () => {
           <Textarea
             {...register("message")}
             className="wrap resize-none p-2 text-sm"
-            placeholder="Type your message here..."
-            onChange={(target) => {
-              const height = target.currentTarget.scrollHeight;
+            placeholder="Type a message..."
+            onKeyDown={(event) => {
+              const height = event.currentTarget.scrollHeight;
 
               if (composeInputHeight < 128) {
                 setComposeInputHeight(height);
               }
 
-              if (target.currentTarget.value.length <= 0) {
+              if (event.currentTarget.value.trim().length <= 0) {
                 setComposeInputHeight(textLineHieght);
+              }
+
+              if (
+                event.key === "Enter" &&
+                event.currentTarget.value.trim().length <= 0
+              ) {
+                event.preventDefault();
+                return;
+              }
+
+              if (event.key === "Enter" && !event.shiftKey) {
+                handleSubmit((data) => {
+                  socket.emit(
+                    "send-private-message",
+                    JSON.stringify({
+                      ...data,
+                      user0_id: user.id,
+                      user1_id: active_chat.friend_id,
+                    }),
+                  );
+                })();
+                reset();
+                event.preventDefault();
               }
             }}
             style={{
@@ -132,8 +159,8 @@ const ComposeMessage = () => {
             }}
           />
         </div>
-        <button className="flex cursor-pointer items-center justify-center  font-bold text-slate-800">
-          <TbSend className="m-2" size={28} />
+        <button className="flex cursor-pointer items-center justify-center font-bold text-slate-800">
+          <TbSend className="ml-3" size={28} />
         </button>
       </form>
     </div>

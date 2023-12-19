@@ -21,9 +21,9 @@ const NewMessage = () => {
   const access_token = useGlobalStore((state) => state.access_token);
 
   return (
-    <div className="h-full w-full p-4">
+    <div className="h-full w-full p-4 sm:py-2">
       <div className="flex items-center justify-between">
-        <h1 className="text-md font-bold sm:text-2xl">New Message</h1>
+        <h1 className="text-md font-bold sm:text-xl">New Message</h1>
         <div onClick={toggleNewMessage}>
           <IoClose className="cursor-pointer" size={24} />
         </div>
@@ -88,6 +88,8 @@ const NewMessage = () => {
                     first_name: res.data.first_name,
                     last_name: res.data.last_name,
                   });
+
+                  toggleNewMessage();
                 } catch (error) {
                   console.log(error);
                 }

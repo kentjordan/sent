@@ -98,7 +98,7 @@ const LoginPage = () => {
             </div>
             <div className="my-2 flex w-full justify-start">
               <span className="m-2 text-sm">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link className="font-bold" href="/register">
                   Register here.
                 </Link>

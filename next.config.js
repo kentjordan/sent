@@ -1,14 +1,23 @@
 /** @type {import('next').NextConfig} */
 
-const PROD_API_PROTOCOL = "https";
+const setVariable = ({ prod, dev }) => {
+  return process.env.NODE_ENV === "production" ? prod : dev;
+};
 
-const PROD_API_HOSTNAME = "localhost";
-const PROD_WS_HOSTNAME = "localhost:3500";
+const API_PROTOCOL = setVariable({
+  dev: "http",
+  prod: "https",
+});
 
-const DEV_API_PROTOCOL = "http";
+const REST_HOSTNAME = setVariable({
+  dev: "localhost:3001",
+  prod: "13.215.30.232/rest",
+});
 
-const DEV_API_HOSTNAME = "localhost:3001";
-const DEV_WS_HOSTNAME = "localhost:3500";
+const WS_HOSTNAME = setVariable({
+  dev: "localhost:3500",
+  prod: "13.215.30.232/ws",
+});
 
 const nextConfig = {
   reactStrictMode: false,
@@ -16,9 +25,9 @@ const nextConfig = {
     remotePatterns: [{ hostname: "picsum.photos" }],
   },
   env: {
-    WS_GATEWAY_CHAT: `${DEV_API_PROTOCOL}://${DEV_WS_HOSTNAME}/chat`,
-    WS_GATEWAY_INBOX: `${DEV_API_PROTOCOL}://${DEV_WS_HOSTNAME}/inbox`,
-    API_HOSTNAME: `${DEV_API_PROTOCOL}://${DEV_API_HOSTNAME}`,
+    WS_GATEWAY_CHAT: `${API_PROTOCOL}://${WS_HOSTNAME}/chat`,
+    WS_GATEWAY_INBOX: `${API_PROTOCOL}://${WS_HOSTNAME}/inbox`,
+    API_HOSTNAME: `${API_PROTOCOL}://${REST_HOSTNAME}`,
   },
 };
 

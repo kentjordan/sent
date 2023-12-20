@@ -11,7 +11,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
+    <html lang="en">
+      <head>
+        <title>Sent!</title>
+      </head>
       <body className={inter.className}>
         <QueryClientProvider client={new QueryClient()}>
           {children}

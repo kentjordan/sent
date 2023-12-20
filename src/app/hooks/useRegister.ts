@@ -1,16 +1,16 @@
-import useGlobalStore from "@/zustand/store.global";
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import * as jwt from "jsonwebtoken";
-import { IUserJWT } from "@/zustand/types";
+import useAppState from "./useAppState";
+import { useDispatch } from "react-redux";
+import { IUserJWT, setAccessToken, setUser } from "@/redux/app.slice";
 
 const useRegisterAccount = <T>(router?: AppRouterInstance) => {
 
-    const API_URL = `${process.env.API_HOSTNAME}/auth/signup`;
+    const dispatch = useDispatch();
 
-    const setAccessToken = useGlobalStore((state) => state.setAccessToken);
-    const setUser = useGlobalStore((state) => state.setUser);
+    const API_URL = `${process.env.API_HOSTNAME}/auth/signup`;
 
     return useMutation({
         mutationFn: (data: T) => axios.post(API_URL, data),
@@ -18,8 +18,8 @@ const useRegisterAccount = <T>(router?: AppRouterInstance) => {
             const { access_token } = res.data;
             const user = jwt.decode(access_token) as IUserJWT;
 
-            setAccessToken(access_token);
-            setUser(user);
+            dispatch(setAccessToken(access_token));
+            dispatch(setUser(user));
 
             router?.replace("/inbox");
         },

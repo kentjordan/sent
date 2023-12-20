@@ -10,6 +10,8 @@ import useGlobalStore, { initial_state } from "@/zustand/store.global";
 import NewMessage from "./new_message";
 import { useRouter } from "next/navigation";
 import { CiLogout } from "react-icons/ci";
+import { useMutation } from "@tanstack/react-query";
+import { PulseLoader } from "react-spinners";
 
 const SideBar = () => {
   const [chatPrivateMessages, setChatPrivateMessages] = useState<
@@ -22,6 +24,18 @@ const SideBar = () => {
   const toggleNewMessage = useGlobalStore((state) => state.toggleNewMessage);
   const access_token = useGlobalStore((state) => state.access_token);
 
+  const { mutateAsync, isPending, isSuccess } = useMutation({
+    mutationFn: async () =>
+      axios.get(`${process.env.API_HOSTNAME}/private-message/latest`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }),
+    onSuccess(res, variables, context) {
+      setChatPrivateMessages(res.data);
+    },
+  });
+
   useEffect(() => {
     const socket = io(process.env.WS_GATEWAY_INBOX as string, {
       auth: {
@@ -29,31 +43,11 @@ const SideBar = () => {
       },
     });
 
-    socket.on("connect", () => {
-      console.log("socket connected");
-    });
-
     socket.on("inbox", (data) => {
-      axios
-        .get(`${process.env.API_HOSTNAME}/private-message/latest`, {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        })
-        .then((res) => {
-          setChatPrivateMessages(res.data);
-        });
+      mutateAsync();
     });
 
-    axios
-      .get(`${process.env.API_HOSTNAME}/private-message/latest`, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      })
-      .then((res) => {
-        setChatPrivateMessages(res.data);
-      });
+    mutateAsync();
   }, []);
 
   const router = useRouter();
@@ -84,7 +78,13 @@ const SideBar = () => {
               placeholder='Search chat...'
             />
           </div> */}
-          {chatPrivateMessages.length <= 0 ? (
+
+          {chatPrivateMessages.length <= 0 && isPending ? (
+            <div className="flex h-full w-full flex-col items-center justify-center  px-2">
+              <PulseLoader size={8} />
+            </div>
+          ) : null}
+          {chatPrivateMessages.length <= 0 && isSuccess ? (
             <div className="mt-[-64px]  flex h-full w-full flex-wrap items-center justify-center px-2">
               <span className="text-center text-xs">
                 Click

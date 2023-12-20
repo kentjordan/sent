@@ -9,6 +9,8 @@ import axios from "axios";
 import { Socket, io } from "socket.io-client";
 import useGlobalStore from "@/zustand/store.global";
 import { IMessage } from "../types";
+import { useMutation } from "@tanstack/react-query";
+import { PulseLoader } from "react-spinners";
 
 let socket: Socket;
 
@@ -23,6 +25,18 @@ const ComposeMessage = () => {
   const access_token = useGlobalStore((state) => state.access_token);
   const form_message = useRef<HTMLFormElement>(null);
 
+  const { mutateAsync, isPending, isSuccess } = useMutation({
+    mutationFn: async () =>
+      axios.get<IMessage[]>(
+        `${process.env.API_HOSTNAME}/private-message/chat/${active_chat.friend_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      ),
+  });
+
   useEffect(() => {
     socket = io(process.env.WS_GATEWAY_CHAT as string, {
       auth: {
@@ -33,26 +47,12 @@ const ComposeMessage = () => {
 
     const init = async () => {
       socket.on("receive_message", async (data: any) => {
-        const res = await axios.get<IMessage[]>(
-          `${process.env.API_HOSTNAME}/private-message/chat/${active_chat.friend_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          },
-        );
+        const res = await mutateAsync();
         setMessages(res.data);
       });
 
       // Initialize messages on UI
-      const res = await axios.get(
-        `${process.env.API_HOSTNAME}/private-message/chat/${active_chat.friend_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        },
-      );
+      const res = await mutateAsync();
       setMessages(res.data);
     };
     init();
@@ -78,12 +78,18 @@ const ComposeMessage = () => {
         id="compose_message"
         className="flex h-full flex-col overflow-y-scroll scroll-smooth p-2"
       >
-        {messages
-          .map((e, i) => {
-            const position = e.user0_id !== user.id ? "start" : "end";
-            return <ChatBubble key={e.id} {...{ position, ...e }} />;
-          })
-          .reverse()}
+        {isPending && (
+          <div className="flex h-full w-full items-center justify-center">
+            <PulseLoader size={8} />
+          </div>
+        )}
+        {isSuccess &&
+          messages
+            .map((e, i) => {
+              const position = e.user0_id !== user.id ? "start" : "end";
+              return <ChatBubble key={e.id} {...{ position, ...e }} />;
+            })
+            .reverse()}
       </div>
       <form
         ref={form_message}

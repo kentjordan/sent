@@ -18,7 +18,7 @@ const textLineHieght = 24;
 
 const ComposeMessage = () => {
   const [composeInputHeight, setComposeInputHeight] = useState(textLineHieght);
-  const { handleSubmit, register } = useForm<{ message: string }>();
+  const { handleSubmit, register, reset } = useForm<{ message: string }>();
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   const { user, accessToken } = useAppState();
@@ -47,9 +47,15 @@ const ComposeMessage = () => {
 
     const init = async () => {
       socket.on("receive_message", async (data: any) => {
-        const res = await mutateAsync();
+        const res = await axios.get<IMessage[]>(
+          `${process.env.API_HOSTNAME}/private-message/chat/${active_chat.friend_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
         setMessages(res.data);
-        // console.log('socket.on("receive_message")', res.data);
       });
 
       // Initialize messages on UI
@@ -59,8 +65,6 @@ const ComposeMessage = () => {
     };
     init();
 
-    // console.log("useEffect [active_chat.chat_id]");
-
     return () => {
       socket.close();
     };
@@ -69,10 +73,7 @@ const ComposeMessage = () => {
   useEffect(() => {
     const ref = document.getElementById("compose_message") as HTMLElement;
     ref.scrollTo(0, ref.scrollHeight);
-    // console.log("useEffect [messages]");
   }, [messages]);
-
-  // console.log("Render");
 
   return (
     <div className="flex max-h-screen w-full flex-1 flex-col">
@@ -110,7 +111,7 @@ const ComposeMessage = () => {
                 user1_id: active_chat.friend_id,
               }),
             );
-            // reset();
+            reset();
           }
         })}
         className="flex items-center p-4"
@@ -125,11 +126,11 @@ const ComposeMessage = () => {
               const height = event.currentTarget.scrollHeight;
 
               if (composeInputHeight < 128) {
-                // setComposeInputHeight(height);
+                setComposeInputHeight(height);
               }
 
               if (event.currentTarget.value.trim().length <= 0) {
-                // setComposeInputHeight(textLineHieght);
+                setComposeInputHeight(textLineHieght);
               }
 
               if (
@@ -151,7 +152,7 @@ const ComposeMessage = () => {
                     }),
                   );
                 })();
-                // reset();
+                reset();
                 event.preventDefault();
               }
             }}

@@ -6,6 +6,7 @@ import useGlobalStore from "@/zustand/store.global";
 import axios from "axios";
 import { io } from "socket.io-client";
 import { DateTime } from "luxon";
+import { getSeenTime } from "@/lib/inbox";
 
 const SidebarChat = (privateMessage: IPrivateMessage) => {
   const [isSeen, setIsSeen] = useState(true);
@@ -95,9 +96,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
         </div>
       </div>
       <span className="hidden w-fit text-[10px] text-stone-500 md:flex">
-        {DateTime.fromISO(privateMessage.created_at).toRelative({
-          style: "narrow",
-        })}
+        {getSeenTime(privateMessage.created_at)}
       </span>
     </div>
   );

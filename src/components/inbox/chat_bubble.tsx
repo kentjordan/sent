@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { IMessage } from "./types";
 import { DateTime } from "luxon";
+import { getSeenTime } from "@/lib/inbox";
 
 const ChatBubble = ({
   position,
@@ -20,7 +21,7 @@ const ChatBubble = ({
       <div className="group flex items-center">
         {position === "end" ? (
           <span className="hidden w-fit text-[11px] text-stone-500 group-hover:flex">
-            {DateTime.fromISO(created_at).toRelative({ style: "narrow" })}
+            {getSeenTime(created_at)}
           </span>
         ) : null}
         <div className="flex items-center">
@@ -48,7 +49,7 @@ const ChatBubble = ({
         </div>
         {position === "start" ? (
           <span className="hidden w-fit text-[11px] text-stone-500 group-hover:flex">
-            {DateTime.fromISO(created_at).toRelative({ style: "narrow" })}
+            {getSeenTime(created_at)}
           </span>
         ) : null}
       </div>{" "}

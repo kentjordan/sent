@@ -11,6 +11,9 @@ import useRegisterAccount from "../hooks/useRegister";
 import PulseLoader from "react-spinners/PulseLoader";
 import Link from "next/link";
 
+let debounceTimerId: any;
+const DEBOUNCE_TIMEOUT = 500;
+
 const RegisterPage = () => {
   const {
     register,
@@ -23,7 +26,7 @@ const RegisterPage = () => {
 
   const router = useRouter();
 
-  const { mutateAsync, isSuccess } =
+  const { mutateAsync, isSuccess, isPending } =
     useRegisterAccount<z.infer<typeof registerSchema>>(router);
 
   return (
@@ -40,7 +43,10 @@ const RegisterPage = () => {
           <form
             className="flex w-full flex-col items-center px-2"
             onSubmit={handleSubmit((data: z.infer<typeof registerSchema>) => {
-              mutateAsync(data);
+              clearTimeout(debounceTimerId);
+              debounceTimerId = setTimeout(async () => {
+                await mutateAsync(data);
+              }, DEBOUNCE_TIMEOUT);
             })}
           >
             <div className="flex w-full flex-col items-center">
@@ -104,14 +110,7 @@ const RegisterPage = () => {
               <Input
                 type="password"
                 className="m-2"
-                {...register("confirm_password", {
-                  validate(val: string) {
-                    const password = watch("password");
-                    console.log(password);
-
-                    return val;
-                  },
-                })}
+                {...register("confirm_password")}
                 placeholder="Confirm password"
               />
               {errors.confirm_password && (
@@ -123,7 +122,7 @@ const RegisterPage = () => {
               )}
             </div>
             <div className="flex w-full">
-              {isSuccess ? (
+              {isSuccess || isPending ? (
                 <Button disabled className="my-4 w-full">
                   <PulseLoader color="white" size={8} />
                 </Button>

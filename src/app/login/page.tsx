@@ -16,6 +16,9 @@ import Link from "next/link";
 
 type PostLoginDto = z.infer<typeof loginSchema>;
 
+let debounceTimerId: any;
+const DEBOUNCE_TIMEOUT = 500;
+
 const LoginPage = () => {
   const setTokens = useGlobalStore(
     (state: IGlobalState) => state.setAccessToken,
@@ -27,6 +30,7 @@ const LoginPage = () => {
   const {
     handleSubmit,
     register,
+    setError,
     formState: { errors },
   } = useForm<PostLoginDto>({ resolver: zodResolver(loginSchema) });
 
@@ -68,9 +72,10 @@ const LoginPage = () => {
           <h1 className="mx-2 my-4 text-2xl font-bold">Login</h1>
           <form
             onSubmit={handleSubmit(async (data: PostLoginDto) => {
-              try {
+              clearTimeout(debounceTimerId);
+              debounceTimerId = setTimeout(async () => {
                 await mutateAsync(data);
-              } catch (error) {}
+              }, DEBOUNCE_TIMEOUT);
             })}
             className="flex flex-col items-center"
           >
@@ -86,7 +91,7 @@ const LoginPage = () => {
               placeholder="Password"
             />
             <div className="flex w-full">
-              {isSuccess ? (
+              {isSuccess || isPending ? (
                 <Button disabled className="my-4 w-full">
                   <PulseLoader color="white" size={8} />
                 </Button>
@@ -109,7 +114,9 @@ const LoginPage = () => {
             <div className="m-2 rounded bg-red-100/50 p-2">
               <ul className="text-red-700">
                 <li className="my-2 text-center text-xs font-bold">
-                  {error.response?.data.message}
+                  {error.response?.status === 404
+                    ? "Incorrect email"
+                    : error.response?.data.message}
                 </li>
               </ul>
             </div>

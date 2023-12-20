@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import * as jwt from "jsonwebtoken";
-import useAppState from "./useAppState";
 import { useDispatch } from "react-redux";
 import { IUserJWT, setAccessToken, setUser } from "@/redux/app.slice";
 

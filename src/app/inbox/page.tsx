@@ -4,13 +4,13 @@ import SideBar from "@/components/inbox/sidebar_chat";
 import { useRouter } from "next/navigation";
 import { useLayoutEffect } from "react";
 
-import { IUserJWT } from "@/zustand/types";
 import axios, { AxiosError } from "axios";
 import * as jwt from "jsonwebtoken";
 import SidebarMenu from "@/components/inbox/sidebar_menu";
 import {
   IAppInitState,
   IAppState,
+  IUserJWT,
   setAccessToken,
   setUser,
 } from "@/redux/app.slice";

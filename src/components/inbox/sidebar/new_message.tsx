@@ -7,6 +7,9 @@ import { IoClose } from "react-icons/io5";
 import Image from "next/image";
 import { PulseLoader } from "react-spinners";
 
+let debounceTimerId: any;
+let DEBOUNCE_TIMEOUT: number = 800;
+
 const NewMessage = () => {
   const toggleNewMessage = useGlobalStore((state) => state.toggleNewMessage);
 
@@ -28,7 +31,7 @@ const NewMessage = () => {
           <IoClose className="cursor-pointer" size={24} />
         </div>
       </div>
-      <div className=" my-8 flex w-full items-center justify-center">
+      <div className=" my-6 flex w-full items-center justify-center">
         <Input
           id="search_chat"
           className="w-full text-sm"
@@ -41,19 +44,25 @@ const NewMessage = () => {
               return;
             }
 
+            setIsSearching(true);
+
             const findPerson = async () => {
-              setIsSearching(true);
               const res = await axios.get(
                 `${process.env.API_HOSTNAME}/users/search?q=${q}`,
               );
               setFounderUsers(res.data);
               setIsSearching(false);
             };
-            findPerson();
+
+            clearTimeout(debounceTimerId);
+
+            debounceTimerId = setTimeout(() => {
+              findPerson();
+            }, DEBOUNCE_TIMEOUT);
           }}
         />
       </div>
-      <div className="flex min-h-[12px] w-full items-center justify-center">
+      <div className="mb-1 flex min-h-[12px] w-full items-center justify-center">
         {isSearching && <PulseLoader size={8} />}
       </div>
       <div className="flex w-full flex-col">
@@ -95,7 +104,7 @@ const NewMessage = () => {
                 }
               }}
               key={e.id}
-              className="my-2 flex flex-1 cursor-pointer items-center justify-start p-2 "
+              className="my-3 flex flex-1 cursor-pointer items-center justify-start "
             >
               <Image
                 width={40}

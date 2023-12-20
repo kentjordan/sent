@@ -1,14 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../ui/textarea";
 import { TbSend } from "react-icons/tb";
 import { RiImageAddFill } from "react-icons/ri";
 import ChatBubble from "./chat_bubble";
 import axios from "axios";
 import { Socket, io } from "socket.io-client";
 import useGlobalStore from "@/zustand/store.global";
-import { IMessage } from "./types";
+import { IMessage } from "../types";
 
 let socket: Socket;
 

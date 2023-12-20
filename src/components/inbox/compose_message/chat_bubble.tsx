@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { IMessage } from "./types";
+import { IMessage } from "../types";
 import { getMessageTime } from "@/lib/inbox";
 
 const ChatBubble = ({

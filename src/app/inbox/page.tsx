@@ -1,6 +1,6 @@
 "use client";
 import ComposeMessage from "@/components/inbox/compose_message";
-import SideBar from "@/components/inbox/sidebar";
+import SideBar from "@/components/inbox/sidebar_chat";
 import useGlobalStore from "@/zustand/store.global";
 import { useRouter } from "next/navigation";
 import { useLayoutEffect } from "react";

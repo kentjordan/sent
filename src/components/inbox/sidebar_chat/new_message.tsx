@@ -1,33 +1,36 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import useGlobalStore from "@/zustand/store.global";
 import axios from "axios";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Image from "next/image";
 import { PulseLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { toggleNewMessage, setActiveChat } from "@/redux/sent.slice";
+import useAppState from "@/app/hooks/useAppState";
+
+interface IFoundUser {
+  id: string;
+  first_name: string;
+  last_name: string;
+}
 
 let debounceTimerId: any;
 let DEBOUNCE_TIMEOUT: number = 800;
 
 const NewMessage = () => {
-  const toggleNewMessage = useGlobalStore((state) => state.toggleNewMessage);
-
-  const [foundUsers, setFounderUsers] = useState<
-    Array<{ id: string; first_name: string; last_name: string }>
-  >([]);
+  const dispatch = useDispatch();
+  const [foundUsers, setFounderUsers] = useState<Array<IFoundUser>>([]);
 
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  const setActiveChat = useGlobalStore((state) => state.setActiveChat);
-  const user = useGlobalStore((state) => state.user);
-  const access_token = useGlobalStore((state) => state.access_token);
+  const { accessToken } = useAppState();
 
   return (
     <div className="h-full w-full p-4 pl-8 sm:py-3">
       <div className="flex items-center justify-between">
         <h1 className="text-md flex font-bold md:text-xl">New Message</h1>
-        <div onClick={toggleNewMessage}>
+        <div onClick={() => dispatch(toggleNewMessage())}>
           <IoClose className="cursor-pointer" size={24} />
         </div>
       </div>
@@ -85,18 +88,20 @@ const NewMessage = () => {
                     },
                     {
                       headers: {
-                        Authorization: `Bearer ${access_token}`,
+                        Authorization: `Bearer ${accessToken}`,
                       },
                     },
                   );
 
-                  setActiveChat({
-                    is_visible: true,
-                    chat_id: res.data.chat_id,
-                    friend_id: res.data.user1_id,
-                    first_name: res.data.first_name,
-                    last_name: res.data.last_name,
-                  });
+                  dispatch(
+                    setActiveChat({
+                      is_visible: true,
+                      chat_id: res.data.chat_id,
+                      friend_id: res.data.user1_id,
+                      first_name: res.data.first_name,
+                      last_name: res.data.last_name,
+                    }),
+                  );
 
                   toggleNewMessage();
                 } catch (error) {

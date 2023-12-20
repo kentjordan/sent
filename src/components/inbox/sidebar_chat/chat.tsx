@@ -2,16 +2,17 @@
 import Image from "next/image";
 import { useLayoutEffect, useState } from "react";
 import { IPrivateMessage } from "../types";
-import useGlobalStore from "@/zustand/store.global";
 import axios from "axios";
 import { io } from "socket.io-client";
 import { getInboxMessageTime } from "@/lib/inbox";
+import useAppState from "@/app/hooks/useAppState";
+import { useDispatch } from "react-redux";
+import { setActiveChat } from "@/redux/sent.slice";
 
 const SidebarChat = (privateMessage: IPrivateMessage) => {
   const [isSeen, setIsSeen] = useState(true);
-  const setActiveChat = useGlobalStore((state) => state.setActiveChat);
-  const user = useGlobalStore((state) => state.user);
-  const access_token = useGlobalStore((state) => state.access_token);
+  const dispatch = useDispatch();
+  const { user, accessToken } = useAppState();
 
   useLayoutEffect(() => {
     const checkSeenStatus = async () => {
@@ -19,7 +20,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
         { user_id: string; private_message_id: string }[]
       >(`${process.env.API_HOSTNAME}/seen/${privateMessage.id}`, {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -28,7 +29,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
 
     const socket = io(process.env.WS_GATEWAY_INBOX as string, {
       auth: {
-        user_id: user.id as string,
+        user_id: user?.id as string,
       },
     });
 
@@ -43,23 +44,25 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
     <div
       className="relative my-3 flex w-full cursor-pointer items-center justify-start pr-4 sm:justify-between"
       onClick={() => {
-        setActiveChat({
-          is_visible: true,
-          chat_id: privateMessage.chat_id,
-          first_name: privateMessage.first_name,
-          last_name: privateMessage.last_name,
-          friend_id: privateMessage.friend_id,
-        });
+        dispatch(
+          setActiveChat({
+            is_visible: true,
+            chat_id: privateMessage.chat_id,
+            first_name: privateMessage.first_name,
+            last_name: privateMessage.last_name,
+            friend_id: privateMessage.friend_id,
+          }),
+        );
 
         const seenMessage = async () => {
           await axios.post(
             `${process.env.API_HOSTNAME}/seen/${privateMessage.id}`,
             {
-              user_id: user.id,
+              user_id: user?.id,
             },
             {
               headers: {
-                Authorization: `Bearer ${access_token}`,
+                Authorization: `Bearer ${accessToken}`,
               },
             },
           );
@@ -88,7 +91,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
             {privateMessage.first_name} {privateMessage.last_name}
           </h1>
           <span className={`${isSeen ? "font-normal" : "font-bold"}`}>
-            {user.id === privateMessage.friend_id ? "You: " : ""}{" "}
+            {user?.id === privateMessage.friend_id ? "You: " : ""}{" "}
             {privateMessage.message.slice(0, 22)}
             {privateMessage.message.length >= 22 ? "..." : ""}
           </span>

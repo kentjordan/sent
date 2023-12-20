@@ -6,29 +6,31 @@ import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { IPrivateMessage } from "../types";
-import useGlobalStore, { initial_state } from "@/zustand/store.global";
 import NewMessage from "./new_message";
-import { useRouter } from "next/navigation";
 import { CiLogout } from "react-icons/ci";
 import { useMutation } from "@tanstack/react-query";
 import { PulseLoader } from "react-spinners";
+import useAppState from "@/app/hooks/useAppState";
+import useSentState from "@/app/hooks/useSentState";
+import { useDispatch } from "react-redux";
+import { toggleNewMessage } from "@/redux/sent.slice";
+import useLogout from "@/app/hooks/useLogout";
 
 const SideBar = () => {
   const [chatPrivateMessages, setChatPrivateMessages] = useState<
     IPrivateMessage[]
   >([]);
-  const user = useGlobalStore((state) => state.user);
-  const is_new_message_visible = useGlobalStore(
-    (state) => state.is_new_message_visible,
-  );
-  const toggleNewMessage = useGlobalStore((state) => state.toggleNewMessage);
-  const access_token = useGlobalStore((state) => state.access_token);
+
+  const { user, accessToken } = useAppState();
+  const { is_new_message_visible } = useSentState();
+  const dispatch = useDispatch();
+  const logout = useLogout();
 
   const { mutateAsync, isPending, isSuccess } = useMutation({
     mutationFn: async () =>
       axios.get(`${process.env.API_HOSTNAME}/private-message/latest`, {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }),
     onSuccess(res, variables, context) {
@@ -39,7 +41,7 @@ const SideBar = () => {
   useEffect(() => {
     const socket = io(process.env.WS_GATEWAY_INBOX as string, {
       auth: {
-        user_id: user.id as string,
+        user_id: user?.id as string,
       },
     });
 
@@ -49,9 +51,6 @@ const SideBar = () => {
 
     mutateAsync();
   }, []);
-
-  const router = useRouter();
-  const resetState = useGlobalStore((state) => state.resetState);
 
   return (
     <div className="relative flex h-full flex-col items-start p-0 sm:pr-4 sm:pt-4 md:min-w-[24rem] md:max-w-[24rem]">
@@ -65,7 +64,7 @@ const SideBar = () => {
             </h1>
             <div className="z-10 m-4 flex w-full justify-center sm:justify-end">
               <RiChatNewLine
-                onClick={toggleNewMessage}
+                onClick={() => dispatch(toggleNewMessage())}
                 size={24}
                 className="cursor-pointer"
               />
@@ -110,16 +109,7 @@ const SideBar = () => {
             </div>
           )}
           <div
-            onClick={() => {
-              const logout = async () => {
-                resetState(initial_state);
-                await axios.get(`${process.env.API_HOSTNAME}/auth/logout`, {
-                  withCredentials: true,
-                });
-                router.replace("/login");
-              };
-              logout();
-            }}
+            onClick={logout}
             className="flex w-full cursor-pointer flex-col items-center justify-center bg-stone-200 py-4 sm:hidden"
           >
             <CiLogout size={24} />

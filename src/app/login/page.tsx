@@ -8,11 +8,13 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PulseLoader } from "react-spinners";
-import useGlobalStore from "@/zustand/store.global";
-import { IGlobalState, IUserJWT } from "@/zustand/types";
 import { useRouter } from "next/navigation";
 import * as jwt from "jsonwebtoken";
 import Link from "next/link";
+
+import { AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
+import { IUserJWT, setAccessToken, setUser } from "@/redux/app.slice";
 
 type PostLoginDto = z.infer<typeof loginSchema>;
 
@@ -20,10 +22,7 @@ let debounceTimerId: any;
 const DEBOUNCE_TIMEOUT = 500;
 
 const LoginPage = () => {
-  const setTokens = useGlobalStore(
-    (state: IGlobalState) => state.setAccessToken,
-  );
-  const setUser = useGlobalStore((state) => state.setUser);
+  const dispatch = useDispatch<AppDispatch>();
 
   const router = useRouter();
 
@@ -43,8 +42,8 @@ const LoginPage = () => {
       const { access_token } = data.data;
       const user = jwt.decode(access_token) as IUserJWT;
 
-      setTokens(access_token);
-      setUser(user);
+      dispatch(setAccessToken(access_token));
+      dispatch(setUser(user));
 
       router.replace("/inbox");
     },

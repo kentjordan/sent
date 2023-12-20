@@ -7,22 +7,22 @@ import { RiImageAddFill } from "react-icons/ri";
 import ChatBubble from "./chat_bubble";
 import axios from "axios";
 import { Socket, io } from "socket.io-client";
-import useGlobalStore from "@/zustand/store.global";
 import { IMessage } from "../types";
 import { useMutation } from "@tanstack/react-query";
 import { PulseLoader } from "react-spinners";
+import useAppState from "@/app/hooks/useAppState";
+import useSentState from "@/app/hooks/useSentState";
 
 let socket: Socket;
+const textLineHieght = 24;
 
 const ComposeMessage = () => {
-  const textLineHieght = 24;
   const [composeInputHeight, setComposeInputHeight] = useState(textLineHieght);
-  const { handleSubmit, register, reset } = useForm<{ message: string }>();
+  const { handleSubmit, register } = useForm<{ message: string }>();
   const [messages, setMessages] = useState<IMessage[]>([]);
 
-  const user = useGlobalStore((state) => state.user);
-  const active_chat = useGlobalStore((state) => state.active_chat);
-  const access_token = useGlobalStore((state) => state.access_token);
+  const { user, accessToken } = useAppState();
+  const { active_chat } = useSentState();
   const form_message = useRef<HTMLFormElement>(null);
 
   const { mutateAsync, isPending, isSuccess } = useMutation({
@@ -31,7 +31,7 @@ const ComposeMessage = () => {
         `${process.env.API_HOSTNAME}/private-message/chat/${active_chat.friend_id}`,
         {
           headers: {
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       ),
@@ -40,7 +40,7 @@ const ComposeMessage = () => {
   useEffect(() => {
     socket = io(process.env.WS_GATEWAY_CHAT as string, {
       auth: {
-        user_id: user.id as string,
+        user_id: user?.id as string,
         friend_id: active_chat.friend_id as string,
       },
     });
@@ -49,13 +49,17 @@ const ComposeMessage = () => {
       socket.on("receive_message", async (data: any) => {
         const res = await mutateAsync();
         setMessages(res.data);
+        // console.log('socket.on("receive_message")', res.data);
       });
 
       // Initialize messages on UI
       const res = await mutateAsync();
+
       setMessages(res.data);
     };
     init();
+
+    // console.log("useEffect [active_chat.chat_id]");
 
     return () => {
       socket.close();
@@ -65,7 +69,10 @@ const ComposeMessage = () => {
   useEffect(() => {
     const ref = document.getElementById("compose_message") as HTMLElement;
     ref.scrollTo(0, ref.scrollHeight);
+    // console.log("useEffect [messages]");
   }, [messages]);
+
+  // console.log("Render");
 
   return (
     <div className="flex max-h-screen w-full flex-1 flex-col">
@@ -86,7 +93,7 @@ const ComposeMessage = () => {
         {isSuccess &&
           messages
             .map((e, i) => {
-              const position = e.user0_id !== user.id ? "start" : "end";
+              const position = e.user0_id !== user?.id ? "start" : "end";
               return <ChatBubble key={e.id} {...{ position, ...e }} />;
             })
             .reverse()}
@@ -99,11 +106,11 @@ const ComposeMessage = () => {
               "send-private-message",
               JSON.stringify({
                 ...data,
-                user0_id: user.id,
+                user0_id: user?.id,
                 user1_id: active_chat.friend_id,
               }),
             );
-            reset();
+            // reset();
           }
         })}
         className="flex items-center p-4"
@@ -118,11 +125,11 @@ const ComposeMessage = () => {
               const height = event.currentTarget.scrollHeight;
 
               if (composeInputHeight < 128) {
-                setComposeInputHeight(height);
+                // setComposeInputHeight(height);
               }
 
               if (event.currentTarget.value.trim().length <= 0) {
-                setComposeInputHeight(textLineHieght);
+                // setComposeInputHeight(textLineHieght);
               }
 
               if (
@@ -139,12 +146,12 @@ const ComposeMessage = () => {
                     "send-private-message",
                     JSON.stringify({
                       ...data,
-                      user0_id: user.id,
+                      user0_id: user?.id,
                       user1_id: active_chat.friend_id,
                     }),
                   );
                 })();
-                reset();
+                // reset();
                 event.preventDefault();
               }
             }}

@@ -60,14 +60,16 @@ const SideBar = () => {
   const resetState = useGlobalStore((state) => state.resetState);
 
   return (
-    <div className="relative flex h-full flex-col items-start p-0 sm:p-4 md:min-w-[20rem] md:max-w-[20rem]">
+    <div className="relative flex h-full flex-col items-start p-0 sm:pr-4 sm:pt-4 md:min-w-[24rem] md:max-w-[24rem]">
       {is_new_message_visible ? (
         <NewMessage />
       ) : (
         <>
-          <div className="mb-8 flex w-full items-center justify-between p-4 sm:py-0">
-            <h1 className="hidden font-bold sm:flex sm:text-xl">Messages</h1>
-            <div className="z-10 flex w-full justify-center sm:justify-end">
+          <div className="mb-4 flex w-full items-center justify-between sm:py-0">
+            <h1 className=" text-md ml-8 hidden font-bold sm:flex md:text-xl">
+              Messages
+            </h1>
+            <div className="z-10 m-4 flex w-full justify-center sm:justify-end">
               <RiChatNewLine
                 onClick={toggleNewMessage}
                 size={24}

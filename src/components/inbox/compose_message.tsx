@@ -8,17 +8,7 @@ import ChatBubble from "./chat_bubble";
 import axios from "axios";
 import { Socket, io } from "socket.io-client";
 import useGlobalStore from "@/zustand/store.global";
-
-interface IMessage {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  message: string;
-  chat_id: string;
-  user0_id: string;
-  user1_id: string;
-  is_seen: boolean;
-}
+import { IMessage } from "./types";
 
 let socket: Socket;
 
@@ -91,9 +81,7 @@ const ComposeMessage = () => {
         {messages
           .map((e, i) => {
             const position = e.user0_id !== user.id ? "start" : "end";
-            return (
-              <ChatBubble key={e.id} position={position} message={e.message} />
-            );
+            return <ChatBubble key={e.id} {...{ position, ...e }} />;
           })
           .reverse()}
       </div>

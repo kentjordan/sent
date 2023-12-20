@@ -5,6 +5,7 @@ import { IPrivateMessage } from "../types";
 import useGlobalStore from "@/zustand/store.global";
 import axios from "axios";
 import { io } from "socket.io-client";
+import { DateTime } from "luxon";
 
 const SidebarChat = (privateMessage: IPrivateMessage) => {
   const [isSeen, setIsSeen] = useState(true);
@@ -40,7 +41,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
 
   return (
     <div
-      className="bg-red relative my-3 flex w-full cursor-pointer items-center justify-start sm:justify-between"
+      className="relative my-3 flex w-full cursor-pointer items-center justify-start pr-4 sm:justify-between"
       onClick={() => {
         setActiveChat({
           is_visible: true,
@@ -68,7 +69,13 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
         seenMessage();
       }}
     >
-      <div className="flex">
+      <div className="flex items-center justify-start ">
+        <div
+          style={{
+            opacity: isSeen ? 0 : 1,
+          }}
+          className="mx-2 min-h-[6px] min-w-[6px] rounded-full bg-slate-700 sm:flex"
+        ></div>
         <Image
           width={40}
           height={40}
@@ -76,20 +83,22 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
           src={"https://picsum.photos/56/56"}
           className="min-h-[3rem] min-w-[3rem] rounded-full"
         />
-        <div className="mx-4 hidden flex-col justify-center text-sm sm:flex">
-          <h1 className={isSeen ? "font-normal" : "font-bold"}>
+        <div className="mx-4 hidden flex-col justify-center text-xs sm:flex md:text-sm">
+          <h1 className={`${isSeen ? "font-normal" : "font-bold"}`}>
             {privateMessage.first_name} {privateMessage.last_name}
           </h1>
-          <span className={isSeen ? "font-normal" : "font-bold"}>
+          <span className={`${isSeen ? "font-normal" : "font-bold"}`}>
             {user.id === privateMessage.friend_id ? "You: " : ""}{" "}
-            {privateMessage.message.slice(0, 28)}
-            {privateMessage.message.length >= 28 ? "..." : ""}
+            {privateMessage.message.slice(0, 24)}
+            {privateMessage.message.length >= 24 ? "..." : ""}
           </span>
         </div>
       </div>
-      {isSeen ? null : (
-        <div className="ml-3 h-3 w-3 rounded-full bg-slate-700 sm:flex"></div>
-      )}
+      <span className="ml-4 hidden w-fit text-[10px] text-stone-500 md:flex">
+        {DateTime.fromISO(privateMessage.created_at).toRelative({
+          style: "narrow",
+        })}
+      </span>
     </div>
   );
 };

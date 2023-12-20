@@ -21,9 +21,9 @@ const NewMessage = () => {
   const access_token = useGlobalStore((state) => state.access_token);
 
   return (
-    <div className="h-full w-full p-4 sm:py-2">
+    <div className="h-full w-full p-4 pl-8 sm:py-3">
       <div className="flex items-center justify-between">
-        <h1 className="text-md font-bold sm:text-xl">New Message</h1>
+        <h1 className="text-md flex font-bold md:text-xl">New Message</h1>
         <div onClick={toggleNewMessage}>
           <IoClose className="cursor-pointer" size={24} />
         </div>

@@ -96,7 +96,7 @@ const SideBar = () => {
               </span>
             </div>
           ) : (
-            <div className="flex w-full flex-col items-start px-2">
+            <div className="flex h-full w-full flex-col items-start overflow-y-auto px-2">
               {chatPrivateMessages.map(
                 (private_message: IPrivateMessage, i) => {
                   return (
@@ -120,7 +120,7 @@ const SideBar = () => {
               };
               logout();
             }}
-            className="absolute bottom-0 flex w-full cursor-pointer flex-col items-center justify-center bg-stone-200 py-4 sm:hidden"
+            className="flex w-full cursor-pointer flex-col items-center justify-center bg-stone-200 py-4 sm:hidden"
           >
             <CiLogout size={24} />
           </div>

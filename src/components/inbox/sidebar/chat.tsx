@@ -89,12 +89,12 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
           </h1>
           <span className={`${isSeen ? "font-normal" : "font-bold"}`}>
             {user.id === privateMessage.friend_id ? "You: " : ""}{" "}
-            {privateMessage.message.slice(0, 24)}
-            {privateMessage.message.length >= 24 ? "..." : ""}
+            {privateMessage.message.slice(0, 22)}
+            {privateMessage.message.length >= 22 ? "..." : ""}
           </span>
         </div>
       </div>
-      <span className="ml-4 hidden w-fit text-[10px] text-stone-500 md:flex">
+      <span className="hidden w-fit text-[10px] text-stone-500 md:flex">
         {DateTime.fromISO(privateMessage.created_at).toRelative({
           style: "narrow",
         })}

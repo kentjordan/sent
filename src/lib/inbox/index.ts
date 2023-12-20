@@ -11,11 +11,11 @@ export const getSeenTime = (created_at: string) => {
     dayPassed -= 1;
 
     if (dayPassed >= 30) {
-        return DateTime.fromISO(created_at).toFormat("MMM'.' dd', 't'");
+        return DateTime.fromISO(created_at).toFormat("MMM'.' dd");
     }
 
     if (dayPassed >= 1 && dayPassed < 30) {
-        return DateTime.fromISO(created_at).toFormat("ccc t");
+        return DateTime.fromISO(created_at).toFormat("ccc");
     }
 
     return DateTime.fromISO(created_at).toFormat("t");

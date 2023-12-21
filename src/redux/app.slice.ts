@@ -8,7 +8,8 @@ export interface IUserJWT {
 
 export interface IAppInitState {
     accessToken: string | undefined
-    user: IUserJWT | undefined
+    user: IUserJWT | undefined,
+    activePath: string,
 }
 
 export interface IAppState extends IAppInitState {
@@ -20,12 +21,16 @@ export interface IAppState extends IAppInitState {
 const initialState: IAppInitState = {
     accessToken: undefined,
     user: undefined,
+    activePath: "/profile"
 }
 
 const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
+        setActivePath: (state, action) => {
+            state.activePath = action.payload
+        },
         setAccessToken: (state, action) => {
             state.accessToken = action.payload
         },
@@ -40,5 +45,5 @@ const appSlice = createSlice({
     }
 });
 
-export const { resetAppState, setAccessToken, setUser } = appSlice.actions;
+export const { resetAppState, setAccessToken, setUser, setActivePath } = appSlice.actions;
 export const appReducers = appSlice.reducer;

@@ -17,7 +17,7 @@ export default function RootLayout({
       <head>
         <title>Sent!</title>
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} h-screen w-screen`}>
         <QueryClientProvider client={new QueryClient()}>
           <Provider store={store}>{children}</Provider>
         </QueryClientProvider>

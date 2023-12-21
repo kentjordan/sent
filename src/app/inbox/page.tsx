@@ -6,7 +6,7 @@ import { useLayoutEffect } from "react";
 
 import axios, { AxiosError } from "axios";
 import * as jwt from "jsonwebtoken";
-import SidebarMenu from "@/components/inbox/sidebar_menu";
+import SidebarMenu from "@/components/sidebar_menu";
 import {
   IAppInitState,
   IAppState,

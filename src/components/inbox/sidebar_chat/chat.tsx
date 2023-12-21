@@ -90,10 +90,13 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
           <h1 className={`${isSeen ? "font-normal" : "font-bold"}`}>
             {privateMessage.first_name} {privateMessage.last_name}
           </h1>
-          <span className={`${isSeen ? "font-normal" : "font-bold"}`}>
-            {user?.id === privateMessage.friend_id ? "You: " : ""}{" "}
-            {privateMessage.message.slice(0, 22)}
-            {privateMessage.message.length >= 22 ? "..." : ""}
+          <span
+            className={`${
+              isSeen ? "font-normal" : "font-bold"
+            } max-w-[22ch] overflow-hidden overflow-ellipsis whitespace-nowrap`}
+          >
+            {user?.id === privateMessage.friend_id ? "You: " : ""}
+            {privateMessage.message}
           </span>
         </div>
       </div>

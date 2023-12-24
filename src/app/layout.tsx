@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <title>Sent!</title>
       </head>
-      <body className={`${inter.className} flex h-screen`}>
+      <body className={`${inter.className} flex h-screen w-screen`}>
         <QueryClientProvider client={new QueryClient()}>
           <Provider store={store}>
             <SidebarMenu />

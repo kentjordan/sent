@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import { setActivePath } from "@/redux/app.slice";
 import { Button } from "@/components/ui/button";
+import useAppState from "@/hooks/useAppState";
+import { useRouter } from "next/navigation";
 
 const ProfilePage = (props: PageProps) => {
   const { isEditProfileVisible, isSendMessageVisible } = useSelector<RootState, IProfileInitState>(
@@ -20,6 +22,8 @@ const ProfilePage = (props: PageProps) => {
   const dispatch = useDispatch();
 
   const [isUserFound, setIsUserFound] = useState(false);
+  const { user } = useAppState();
+  const router = useRouter();
 
   useEffect(() => {
     const getProfileById = async () => {
@@ -59,7 +63,9 @@ const ProfilePage = (props: PageProps) => {
             {!isUserFound && (
               <div className="flex h-full w-full flex-col items-center justify-center gap-4">
                 <h1 className="text-lg font-bold">Profile not found</h1>
-                <Button className="h-12 text-sm">Back to my profile</Button>
+                <Button onClick={() => router.replace(`/profile/${user?.username}`)} className="h-12 text-sm">
+                  Back to my profile
+                </Button>
               </div>
             )}
           </div>

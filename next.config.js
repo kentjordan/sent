@@ -24,7 +24,7 @@ const WS_HOSTNAME = setVariable({
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    remotePatterns: [{ hostname: "picsum.photos" }, { hostname: "localhost" }],
+    remotePatterns: [{ hostname: REST_HOSTNAME }, { hostname: "localhost" }],
   },
   env: {
     WS_GATEWAY_CHAT: `${API_PROTOCOL}://${WS_HOSTNAME}/chat`,

@@ -18,14 +18,17 @@ const MyProfileContainer = ({ username }: { username: string }) => {
   const [profile, setProfile] = useState({
     first_name: "Lorem",
     last_name: "Ipsum",
-    bio: "Update your bio.",
+    bio: "",
     profilePhoto: undefined,
     coverPhoto: undefined,
+    username: "",
   });
 
   useEffect(() => {
     const getProfile = async () => {
       const profile = await axios.get(`${process.env.API_HOSTNAME}/profiles/${username}`);
+      console.log(profile.data);
+
       const profilePhoto = await axios.get(`${process.env.API_HOSTNAME}/images/profile-photo/${profile.data.id}`);
       setProfile({ ...profile.data, profilePhoto: profilePhoto.data.url });
     };
@@ -37,7 +40,7 @@ const MyProfileContainer = ({ username }: { username: string }) => {
     <div className="w-full max-w-[56rem] border-l border-r border-l-stone-200 border-r-stone-200">
       <div className="h-[200px] w-full bg-stone-300"></div>
       {/* <Image className="" src="https://picsum.photos/1500/500" alt={"Profile Photo"} width={1500} height={500} /> */}
-      <div className="flex items-start justify-between border-b p-2 sm:px-6 sm:py-4">
+      <div className="flex items-start justify-between border-b p-4 sm:px-6 sm:py-4">
         <div>
           {profile.profilePhoto ? (
             <Image
@@ -53,7 +56,8 @@ const MyProfileContainer = ({ username }: { username: string }) => {
           <h1 className="mt-4 text-base font-bold sm:text-xl">
             {profile.first_name} {profile.last_name}
           </h1>
-          <p className={`line-clamp-4 sm:line-clamp-2 max-w-[${MAX_CHAR_LENGTH}] my-2 text-sm`}>{profile.bio}</p>
+          <p className="text-sm text-stone-400">@{profile.username}</p>
+          <p className={`line-clamp-4 sm:line-clamp-2 max-w-[${MAX_CHAR_LENGTH}] my-4 text-sm`}>{profile.bio}</p>
         </div>
         <div className="flex items-center">
           {user?.username !== decodeURIComponent(username) && (

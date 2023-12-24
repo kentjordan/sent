@@ -7,9 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import NewMessage from "@/components/profile/newMessage";
 import withAuth from "@/hoc/withAuth";
 import { PageProps } from "@/@types/page";
-import { useEffect } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
 import { setActivePath } from "@/redux/app.slice";
+import { Button } from "@/components/ui/button";
 
 const ProfilePage = (props: PageProps) => {
   const { isEditProfileVisible, isSendMessageVisible } = useSelector<RootState, IProfileInitState>(
@@ -18,16 +19,26 @@ const ProfilePage = (props: PageProps) => {
 
   const dispatch = useDispatch();
 
+  const [isUserFound, setIsUserFound] = useState(false);
+
   useEffect(() => {
     const getProfileById = async () => {
-      const res = await axios.get(`${process.env.API_HOSTNAME}/profiles/${props.params.username}`);
-
-      dispatch(
-        setActiveProfile({
-          ...res.data,
-          userId: res.data.id,
-        }),
-      );
+      try {
+        const res = await axios.get(`${process.env.API_HOSTNAME}/profiles/${props.params.username}`);
+        setIsUserFound(true);
+        dispatch(
+          setActiveProfile({
+            ...res.data,
+            userId: res.data.id,
+          }),
+        );
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 404) {
+            setIsUserFound(false);
+          }
+        }
+      }
     };
 
     if (props.params.username) {
@@ -44,7 +55,13 @@ const ProfilePage = (props: PageProps) => {
           {isEditProfileVisible && <EditProfileDialog />}
           {isSendMessageVisible && <NewMessage />}
           <div className="flex w-full justify-center overflow-y-auto ">
-            <ProfileContainer username={props.params.username} />
+            {isUserFound && <ProfileContainer username={props.params.username} />}
+            {!isUserFound && (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+                <h1 className="text-lg font-bold">Profile not found</h1>
+                <Button className="h-12 text-sm">Back to my profile</Button>
+              </div>
+            )}
           </div>
         </div>
       )}

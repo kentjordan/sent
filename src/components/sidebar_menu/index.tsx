@@ -15,17 +15,17 @@ const SidebarMenu = () => {
 
   if (accessToken) {
     return (
-      <div className="flex h-full w-14 flex-col justify-between bg-stone-100 sm:p-4">
+      <div className="flex h-full w-14 flex-col justify-between bg-stone-100 px-2 sm:py-4">
         <div className="mt-4 flex flex-col items-center justify-center sm:m-0">
           <div
             onClick={() => router.replace(`/profile/${user?.username}`)}
-            className={`mb-4 cursor-pointer rounded-lg ${activePath === "/profile" ? " bg-stone-300" : ""} p-2`}
+            className={`mb-4 cursor-pointer rounded-lg ${activePath === "/profile" ? " bg-stone-300" : ""} p-1`}
           >
             <IoPersonCircleOutline className="cursor-pointer" size={24} />
           </div>
           <div
             onClick={() => router.replace("/inbox")}
-            className={`mb-4 cursor-pointer rounded-lg ${activePath === "/inbox" ? " bg-stone-300" : ""} p-2`}
+            className={`mb-4 cursor-pointer rounded-lg ${activePath === "/inbox" ? " bg-stone-300" : ""} p-1`}
           >
             <BiMessageRounded className="cursor-pointer" color="black" size={24} />
           </div>

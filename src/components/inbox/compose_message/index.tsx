@@ -11,7 +11,8 @@ import { useMutation } from "@tanstack/react-query";
 import { PulseLoader } from "react-spinners";
 import useAppState from "@/hooks/useAppState";
 import useSentState from "@/hooks/useSentState";
-import Link from "next/link";
+import { GoLinkExternal } from "react-icons/go";
+import { useRouter } from "next/navigation";
 
 let socket: Socket;
 const textLineHieght = 24;
@@ -72,12 +73,21 @@ const ComposeMessage = () => {
     ref.scrollTo(0, ref.scrollHeight);
   }, [messages]);
 
+  const router = useRouter();
+
   return (
     <div className="flex max-h-screen w-full flex-1 flex-col">
-      <div className="flex w-full justify-center border-b bg-white p-4">
-        <Link href={`/profile/${active_chat.username}`} className="text-lg font-bold">
+      <div className="flex w-full flex-col justify-center border-b bg-white p-4 ">
+        <h1 className="text-lg font-bold">
           {active_chat.first_name} {active_chat.last_name}
-        </Link>
+        </h1>
+        <div
+          onClick={() => router.replace(`/profile/${active_chat.username}`)}
+          className="flex cursor-pointer items-center"
+        >
+          <p className="text-sm">Visit profile</p>
+          <GoLinkExternal className="mx-2" size={16} />
+        </div>
       </div>
       <div id="compose_message" className="flex h-full flex-col overflow-y-scroll scroll-smooth p-2">
         {isPending && (

@@ -27,8 +27,6 @@ const MyProfileContainer = ({ username }: { username: string }) => {
   useEffect(() => {
     const getProfile = async () => {
       const profile = await axios.get(`${process.env.API_HOSTNAME}/profiles/${username}`);
-      console.log(profile.data);
-
       const profilePhoto = await axios.get(`${process.env.API_HOSTNAME}/images/profile-photo/${profile.data.id}`);
       setProfile({ ...profile.data, profilePhoto: profilePhoto.data.url });
     };

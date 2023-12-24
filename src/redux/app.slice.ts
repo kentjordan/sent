@@ -4,6 +4,7 @@ export interface IUserJWT {
     iat?: number | undefined;
     exp?: number | undefined;
     id?: string | undefined;
+    username?: string | undefined;
 }
 
 export interface IAppInitState {
@@ -21,7 +22,7 @@ export interface IAppState extends IAppInitState {
 const initialState: IAppInitState = {
     accessToken: undefined,
     user: undefined,
-    activePath: "/profile"
+    activePath: "/login"
 }
 
 const appSlice = createSlice({
@@ -38,9 +39,9 @@ const appSlice = createSlice({
             state.user = action.payload;
         },
         resetAppState: (state) => {
-            state = {
-                ...initialState
-            }
+            state.accessToken = initialState.accessToken;
+            state.user = initialState.user;
+            state.activePath = '/login';
         }
     }
 });

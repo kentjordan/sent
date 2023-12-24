@@ -7,6 +7,7 @@ export interface IActiveChat {
     last_name: string,
     friend_id: string | undefined
     message_id?: string | undefined
+    username?: string | undefined,
 }
 
 
@@ -23,7 +24,7 @@ const initialState: ISentInitState = {
         last_name: '',
         friend_id: undefined,
         message_id: undefined,
-
+        username: undefined,
     },
     is_new_message_visible: false
 }
@@ -39,9 +40,8 @@ const sentSlice = createSlice({
             state.is_new_message_visible = !state.is_new_message_visible;
         },
         resetSentState: (state) => {
-            state = {
-                ...initialState
-            }
+            state.active_chat = initialState.active_chat;
+            state.is_new_message_visible = initialState.is_new_message_visible;
         }
     }
 });

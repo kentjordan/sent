@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 
+const { hostname } = require("os");
+
 const setVariable = ({ prod, dev }) => {
   return process.env.NODE_ENV === "production" ? prod : dev;
 };
@@ -22,7 +24,7 @@ const WS_HOSTNAME = setVariable({
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    remotePatterns: [{ hostname: "picsum.photos" }],
+    remotePatterns: [{ hostname: "picsum.photos" }, { hostname: "localhost" }],
   },
   env: {
     WS_GATEWAY_CHAT: `${API_PROTOCOL}://${WS_HOSTNAME}/chat`,

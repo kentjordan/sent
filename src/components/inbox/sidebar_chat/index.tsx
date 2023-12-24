@@ -10,16 +10,14 @@ import NewMessage from "./new_message";
 import { CiLogout } from "react-icons/ci";
 import { useMutation } from "@tanstack/react-query";
 import { PulseLoader } from "react-spinners";
-import useAppState from "@/app/hooks/useAppState";
-import useSentState from "@/app/hooks/useSentState";
+import useAppState from "@/hooks/useAppState";
+import useSentState from "@/hooks/useSentState";
 import { useDispatch } from "react-redux";
 import { toggleNewMessage } from "@/redux/sent.slice";
-import useLogout from "@/app/hooks/useLogout";
+import useLogout from "@/hooks/useLogout";
 
 const SideBar = () => {
-  const [chatPrivateMessages, setChatPrivateMessages] = useState<
-    IPrivateMessage[]
-  >([]);
+  const [chatPrivateMessages, setChatPrivateMessages] = useState<IPrivateMessage[]>([]);
 
   const { user, accessToken } = useAppState();
   const { is_new_message_visible } = useSentState();
@@ -27,10 +25,10 @@ const SideBar = () => {
   const logout = useLogout();
 
   const { mutateAsync, isPending, isSuccess } = useMutation({
-    mutationFn: async () =>
+    mutationFn: async (access_token: string | undefined) =>
       axios.get(`${process.env.API_HOSTNAME}/private-message/latest`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${access_token}`,
         },
       }),
     onSuccess(res, variables, context) {
@@ -46,10 +44,10 @@ const SideBar = () => {
     });
 
     socket.on("inbox", (data) => {
-      mutateAsync();
+      mutateAsync(accessToken);
     });
 
-    mutateAsync();
+    mutateAsync(accessToken);
   }, []);
 
   return (
@@ -58,16 +56,10 @@ const SideBar = () => {
         <NewMessage />
       ) : (
         <>
-          <div className="mb-4 flex w-full items-center justify-between sm:py-0">
-            <h1 className=" text-md ml-8 hidden font-bold sm:flex md:text-xl">
-              Messages
-            </h1>
+          <div className="mb-4 flex w-full items-center justify-between  sm:py-0">
+            <h1 className=" text-md ml-8 hidden font-bold sm:flex md:text-xl">Messages</h1>
             <div className="z-10 m-4 flex w-full justify-center sm:justify-end">
-              <RiChatNewLine
-                onClick={() => dispatch(toggleNewMessage())}
-                size={24}
-                className="cursor-pointer"
-              />
+              <RiChatNewLine onClick={() => dispatch(toggleNewMessage())} size={24} className="cursor-pointer" />
             </div>
           </div>
           {/* <div className=' w-full flex justify-center items-center p-4'>
@@ -87,33 +79,17 @@ const SideBar = () => {
             <div className="mt-[-64px]  flex h-full w-full flex-wrap items-center justify-center px-2">
               <span className="text-center text-xs">
                 Click
-                <RiChatNewLine
-                  size={18}
-                  className="mx-2 inline-block cursor-pointer text-stone-500"
-                />
+                <RiChatNewLine size={18} className="mx-2 inline-block cursor-pointer text-stone-500" />
                 above to start messaging
               </span>
             </div>
           ) : (
-            <div className="flex h-full w-full flex-col items-start overflow-y-auto px-2">
-              {chatPrivateMessages.map(
-                (private_message: IPrivateMessage, i) => {
-                  return (
-                    <SidebarChat
-                      key={private_message.id}
-                      {...private_message}
-                    />
-                  );
-                },
-              )}
+            <div className="flex h-full w-full flex-col items-start overflow-y-auto">
+              {chatPrivateMessages.map((private_message: IPrivateMessage, i) => {
+                return <SidebarChat key={private_message.id} {...private_message} />;
+              })}
             </div>
           )}
-          <div
-            onClick={logout}
-            className="flex w-full cursor-pointer flex-col items-center justify-center bg-stone-200 py-4 sm:hidden"
-          >
-            <CiLogout size={24} />
-          </div>
         </>
       )}
     </div>

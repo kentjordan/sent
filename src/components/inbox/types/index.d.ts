@@ -7,6 +7,7 @@ export interface IPrivateMessage {
     first_name: string;
     last_name: string;
     message: string;
+    username: string;
 }
 
 export interface IMessage {

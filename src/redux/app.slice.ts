@@ -4,11 +4,13 @@ export interface IUserJWT {
     iat?: number | undefined;
     exp?: number | undefined;
     id?: string | undefined;
+    username?: string | undefined;
 }
 
 export interface IAppInitState {
     accessToken: string | undefined
-    user: IUserJWT | undefined
+    user: IUserJWT | undefined,
+    activePath: string,
 }
 
 export interface IAppState extends IAppInitState {
@@ -20,12 +22,16 @@ export interface IAppState extends IAppInitState {
 const initialState: IAppInitState = {
     accessToken: undefined,
     user: undefined,
+    activePath: "/login"
 }
 
 const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
+        setActivePath: (state, action) => {
+            state.activePath = action.payload
+        },
         setAccessToken: (state, action) => {
             state.accessToken = action.payload
         },
@@ -33,12 +39,12 @@ const appSlice = createSlice({
             state.user = action.payload;
         },
         resetAppState: (state) => {
-            state = {
-                ...initialState
-            }
+            state.accessToken = initialState.accessToken;
+            state.user = initialState.user;
+            state.activePath = '/login';
         }
     }
 });
 
-export const { resetAppState, setAccessToken, setUser } = appSlice.actions;
+export const { resetAppState, setAccessToken, setUser, setActivePath } = appSlice.actions;
 export const appReducers = appSlice.reducer;

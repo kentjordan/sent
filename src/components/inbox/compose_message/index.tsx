@@ -3,15 +3,15 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Textarea } from "../../ui/textarea";
 import { TbSend } from "react-icons/tb";
-import { RiImageAddFill } from "react-icons/ri";
 import ChatBubble from "./chat_bubble";
 import axios from "axios";
 import { Socket, io } from "socket.io-client";
 import { IMessage } from "../types";
 import { useMutation } from "@tanstack/react-query";
 import { PulseLoader } from "react-spinners";
-import useAppState from "@/app/hooks/useAppState";
-import useSentState from "@/app/hooks/useSentState";
+import useAppState from "@/hooks/useAppState";
+import useSentState from "@/hooks/useSentState";
+import Link from "next/link";
 
 let socket: Socket;
 const textLineHieght = 24;
@@ -27,14 +27,11 @@ const ComposeMessage = () => {
 
   const { mutateAsync, isPending, isSuccess } = useMutation({
     mutationFn: async () =>
-      axios.get<IMessage[]>(
-        `${process.env.API_HOSTNAME}/private-message/chat/${active_chat.friend_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+      axios.get<IMessage[]>(`${process.env.API_HOSTNAME}/private-message/chat/${active_chat.friend_id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
-      ),
+      }),
   });
 
   useEffect(() => {
@@ -78,14 +75,11 @@ const ComposeMessage = () => {
   return (
     <div className="flex max-h-screen w-full flex-1 flex-col">
       <div className="flex w-full justify-center border-b bg-white p-4">
-        <h1 className="text-lg font-bold">
+        <Link href={`/profile/${active_chat.username}`} className="text-lg font-bold">
           {active_chat.first_name} {active_chat.last_name}
-        </h1>
+        </Link>
       </div>
-      <div
-        id="compose_message"
-        className="flex h-full flex-col overflow-y-scroll scroll-smooth p-2"
-      >
+      <div id="compose_message" className="flex h-full flex-col overflow-y-scroll scroll-smooth p-2">
         {isPending && (
           <div className="flex h-full w-full items-center justify-center">
             <PulseLoader size={8} />
@@ -133,10 +127,7 @@ const ComposeMessage = () => {
                 setComposeInputHeight(textLineHieght);
               }
 
-              if (
-                event.key === "Enter" &&
-                event.currentTarget.value.trim().length <= 0
-              ) {
+              if (event.key === "Enter" && event.currentTarget.value.trim().length <= 0) {
                 event.preventDefault();
                 return;
               }

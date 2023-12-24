@@ -14,7 +14,8 @@ import Link from "next/link";
 
 import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
-import { IUserJWT, setAccessToken, setUser } from "@/redux/app.slice";
+import { IUserJWT, setAccessToken, setActivePath, setUser } from "@/redux/app.slice";
+import { useLayoutEffect } from "react";
 
 type PostLoginDto = z.infer<typeof loginSchema>;
 
@@ -50,21 +51,21 @@ const LoginPage = () => {
     onError(error) {
       if (error instanceof AxiosError) {
         if (error.code === "ERR_NETWORK") {
-          alert(
-            "Can't reach the server. It might have an on-going maintenance.",
-          );
+          alert("Can't reach the server. It might have an on-going maintenance.");
         }
       }
     },
   });
 
+  useLayoutEffect(() => {
+    dispatch(setActivePath("/login"));
+  }, []);
+
   return (
     <div className="flex h-screen w-screen items-center">
       <div className="hidden h-full w-full flex-[0.5] flex-col items-center justify-center bg-slate-800 text-white sm:flex">
         <h1 className="my-2 text-4xl font-bold">Sent!</h1>
-        <span className="my-2 text-center text-sm text-stone-300">
-          An open source messaging app.
-        </span>
+        <span className="my-2 text-center text-sm text-stone-300">An open source messaging app.</span>
       </div>
       <div className="flex flex-1 flex-col items-center p-2">
         <div className="w-full max-w-md">
@@ -78,11 +79,7 @@ const LoginPage = () => {
             })}
             className="flex flex-col items-center"
           >
-            <Input
-              {...register("email", { required: true })}
-              className="m-2 w-full"
-              placeholder="Email"
-            />
+            <Input {...register("username", { required: true })} className="m-2 w-full" placeholder="Username" />
             <Input
               {...register("password", { required: true })}
               className="m-2 w-full"
@@ -113,9 +110,7 @@ const LoginPage = () => {
             <div className="m-2 rounded bg-red-100/50 p-2">
               <ul className="text-red-700">
                 <li className="my-2 text-center text-xs font-bold">
-                  {error.response?.status === 404
-                    ? "Incorrect email"
-                    : error.response?.data.message}
+                  {error.response?.status === 404 ? "Incorrect username" : error.response?.data.message}
                 </li>
               </ul>
             </div>
@@ -134,9 +129,7 @@ const LoginPage = () => {
             </div>
           )}
         </div>
-        <span className="absolute bottom-0 my-8 text-center text-sm text-stone-500">
-          Made by Kent Jordan with 💖
-        </span>
+        <span className="absolute bottom-0 my-8 text-center text-sm text-stone-500">Made by Kent Jordan with 💖</span>
       </div>
     </div>
   );

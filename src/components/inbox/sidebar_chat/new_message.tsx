@@ -7,7 +7,7 @@ import Image from "next/image";
 import { PulseLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { toggleNewMessage, setActiveChat } from "@/redux/sent.slice";
-import useAppState from "@/app/hooks/useAppState";
+import useAppState from "@/hooks/useAppState";
 
 interface IFoundUser {
   id: string;

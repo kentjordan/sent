@@ -1,15 +1,12 @@
 "use client";
-import Image from "next/image";
 import { IMessage } from "../types";
 import { getMessageTime } from "@/lib/inbox";
 
-const ChatBubble = ({
-  position,
-  message,
-  created_at,
-}: {
+interface IMessageBuble extends IMessage {
   position: "start" | "end";
-} & IMessage) => {
+}
+
+const MessageBubble = ({ position, message, created_at }: IMessageBuble) => {
   return (
     <div
       style={{
@@ -18,20 +15,26 @@ const ChatBubble = ({
       className=" my-2 flex w-full "
     >
       <div className="group flex items-center">
+        {/* My Message */}
         {position === "end" ? (
           <span className="hidden w-fit text-[11px] text-stone-500 group-hover:flex">{getMessageTime(created_at)}</span>
         ) : null}
         <div className="flex items-center">
-          <div className="m-2 flex max-w-md items-center rounded-xl bg-slate-700 p-3 text-white">
+          <div
+            className={`m-2 flex max-w-md items-center rounded-xl p-3 ${
+              position === "end" ? "bg-slate-700 text-white" : `bg-stone-200 text-black`
+            }`}
+          >
             <p className="break-all text-sm">{message}</p>
           </div>
         </div>
+        {/* Friend's Message */}
         {position === "start" ? (
           <span className="hidden w-fit text-[11px] text-stone-500 group-hover:flex">{getMessageTime(created_at)}</span>
         ) : null}
-      </div>{" "}
+      </div>
     </div>
   );
 };
 
-export default ChatBubble;
+export default MessageBubble;

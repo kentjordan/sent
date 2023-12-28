@@ -42,7 +42,7 @@ const MyProfileContainer = ({ username }: { username: string }) => {
       {/* <Image className="" src="https://picsum.photos/1500/500" alt={"Profile Photo"} width={1500} height={500} /> */}
       <div className="flex items-start justify-between border-b p-4 sm:px-6 sm:py-4">
         <div>
-          {isDPLoading && (
+          {isDPLoading && profile.profilePhoto && (
             <div className="absolute z-20 mt-[-64px] h-24 w-24 rounded-full bg-stone-200 sm:h-32 sm:w-32"></div>
           )}
           {profile.profilePhoto && (

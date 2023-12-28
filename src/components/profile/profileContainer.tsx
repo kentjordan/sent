@@ -24,6 +24,8 @@ const MyProfileContainer = ({ username }: { username: string }) => {
     username: "",
   });
 
+  const [isDPLoading, setIsDPLoading] = useState(true);
+
   useEffect(() => {
     const getProfile = async () => {
       const profile = await axios.get(`${process.env.API_HOSTNAME}/profiles/${username}`);
@@ -36,19 +38,29 @@ const MyProfileContainer = ({ username }: { username: string }) => {
 
   return (
     <div className="w-full max-w-[56rem] border-l border-r border-l-stone-200 border-r-stone-200">
-      <div className="h-[200px] w-full bg-stone-300"></div>
+      <div className="h-[200px] w-full bg-stone-200"></div>
       {/* <Image className="" src="https://picsum.photos/1500/500" alt={"Profile Photo"} width={1500} height={500} /> */}
       <div className="flex items-start justify-between border-b p-4 sm:px-6 sm:py-4">
         <div>
-          {profile.profilePhoto ? (
+          {isDPLoading && (
+            <div className="absolute z-20 mt-[-64px] h-24 w-24 rounded-full bg-stone-200 sm:h-32 sm:w-32"></div>
+          )}
+          {profile.profilePhoto && (
             <Image
+              style={{
+                opacity: isDPLoading ? 0 : 1,
+              }}
+              onLoad={(e) => {
+                setIsDPLoading(false);
+              }}
               className="mt-[-64px] h-24 w-24 rounded-full sm:h-32 sm:w-32"
               src={profile.profilePhoto}
               alt={"Profile Photo"}
               width={800}
               height={800}
             />
-          ) : (
+          )}
+          {!profile.profilePhoto && (
             <IoPersonCircle className="mt-[-64px] h-24 w-24 rounded-full bg-white sm:h-32 sm:w-32" />
           )}
           <h1 className="mt-4 text-base font-bold sm:text-xl">

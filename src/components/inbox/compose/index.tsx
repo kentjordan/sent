@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Textarea } from "../../ui/textarea";
 import { TbSend } from "react-icons/tb";
-import ChatBubble from "./chat_bubble";
+import ChatBubble from "./messageBubble";
 import axios from "axios";
 import { Socket, io } from "socket.io-client";
 import { IMessage } from "../types";

@@ -4,7 +4,7 @@ import "./globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
-import SidebarMenu from "@/components/sidebar_menu";
+import SidebarMenu from "@/components/sidebarMenu";
 
 const inter = Inter({ subsets: ["latin"] });
 

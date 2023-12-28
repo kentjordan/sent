@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { IPrivateMessage } from "../types";
-import NewMessage from "./new_message";
+import NewMessage from "./newMessage";
 import { CiLogout } from "react-icons/ci";
 import { useMutation } from "@tanstack/react-query";
 import { PulseLoader } from "react-spinners";

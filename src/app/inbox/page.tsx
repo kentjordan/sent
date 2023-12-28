@@ -1,12 +1,12 @@
 "use client";
-import ComposeMessage from "@/components/inbox/compose_message";
-import SideBar from "@/components/inbox/sidebar_chat";
+import ComposeMessage from "@/components/inbox/compose";
+import SideBar from "@/components/inbox/sidebarChat";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect } from "react";
 
 import axios, { AxiosError } from "axios";
 import * as jwt from "jsonwebtoken";
-import SidebarMenu from "@/components/sidebar_menu";
+import SidebarMenu from "@/components/sidebarMenu";
 import { IAppInitState, IAppState, IUserJWT, setAccessToken, setActivePath, setUser } from "@/redux/app.slice";
 import { ISentInitState, setActiveChat } from "@/redux/sent.slice";
 

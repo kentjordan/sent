@@ -41,6 +41,7 @@ const ComposeMessage = () => {
         user_id: user?.id as string,
         friend_id: active_chat.friend_id as string,
       },
+      path: "/sent/ws/socket.io",
     });
 
     const init = async () => {

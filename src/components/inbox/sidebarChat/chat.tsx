@@ -34,6 +34,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
       auth: {
         user_id: user?.id as string,
       },
+      path: "/sent/ws/socket.io",
     });
 
     socket.on("inbox", () => {

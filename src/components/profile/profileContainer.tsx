@@ -36,6 +36,8 @@ const MyProfileContainer = ({ username }: { username: string }) => {
     getProfile();
   }, []);
 
+  console.log(profile.profilePhoto);
+
   return (
     <div className="w-full max-w-[56rem] border-l border-r border-l-stone-200 border-r-stone-200">
       <div className="h-[200px] w-full bg-stone-200"></div>

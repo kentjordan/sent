@@ -21,6 +21,7 @@ const UpdatePost = () => {
     handleSubmit(
       (data) => {
         const updateUserPost = async () => {
+          setIsPostUpdating(true);
           const res = await axios.patch(`${process.env.API_HOSTNAME}/posts/${id}`, data, {
             headers: {
               Authorization: `Bearer ${accessToken}`,

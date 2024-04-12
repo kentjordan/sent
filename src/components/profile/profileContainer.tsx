@@ -12,6 +12,14 @@ import Post from "./Post";
 
 const MAX_CHAR_LENGTH = "56ch";
 
+interface IUserPost {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  content: string;
+  user_id: string;
+}
+
 const MyProfileContainer = ({ username }: { username: string }) => {
   const dispatch = useDispatch();
   const { user } = useAppState();
@@ -26,7 +34,7 @@ const MyProfileContainer = ({ username }: { username: string }) => {
   });
 
   const [isDPLoading, setIsDPLoading] = useState(true);
-  const [userPosts, setUserPosts] = useState([]);
+  const [userPosts, setUserPosts] = useState<Array<IUserPost>>([]);
 
   useEffect(() => {
     const getProfile = async () => {
@@ -106,9 +114,10 @@ const MyProfileContainer = ({ username }: { username: string }) => {
       </div>
       <div className="my-4 flex flex-col items-center">
         {userPosts.length <= 0 && <h1 className="text-center font-bold">No posts yet</h1>}
-        {userPosts.map((post: any, i: number) => (
+        {userPosts.map((post: IUserPost, i: number) => (
           <Post
             key={i}
+            post_id={post.id}
             first_name={profile.first_name}
             last_name={profile.last_name}
             content={post.content}

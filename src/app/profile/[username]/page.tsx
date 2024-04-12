@@ -1,7 +1,7 @@
 "use client";
 import ProfileContainer from "@/components/profile/profileContainer";
 import EditProfileDialog from "@/components/profile/editProfileDialog";
-import { IProfileInitState, setActiveProfile } from "@/redux/profile.slice";
+import { IProfileInitState, setActiveProfile, toggleCreatePost } from "@/redux/profile.slice";
 import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import NewMessage from "@/components/profile/newMessage";
@@ -15,11 +15,13 @@ import useAppState from "@/hooks/useAppState";
 import { useRouter } from "next/navigation";
 import { MdPostAdd } from "react-icons/md";
 import CreatePost from "@/components/profile/CreatePost";
+import DeletePost from "@/components/profile/DeletePost";
 
 const ProfilePage = (props: PageProps) => {
-  const { isEditProfileVisible, isSendMessageVisible } = useSelector<RootState, IProfileInitState>(
-    (state) => state.profile,
-  );
+  const { isEditProfileVisible, isSendMessageVisible, isCreatePostVisible, isDeletePostVisible } = useSelector<
+    RootState,
+    IProfileInitState
+  >((state) => state.profile);
 
   const dispatch = useDispatch();
 
@@ -54,16 +56,15 @@ const ProfilePage = (props: PageProps) => {
     dispatch(setActivePath("/profile"));
   }, [props.params.username]);
 
-  const [createPostDialogueVisibility, setCreatePostDialogueVisibility] = useState(false);
-
   return (
     <>
       {props.accessToken && (
         <div className="relative flex h-screen w-full justify-center">
-          {createPostDialogueVisibility && <CreatePost setVisibility={setCreatePostDialogueVisibility} />}
+          {isDeletePostVisible && <DeletePost />}
+          {isCreatePostVisible && <CreatePost />}
           <div
-            onClick={() => setCreatePostDialogueVisibility(true)}
-            className="absolute bottom-0 right-0 m-8 flex rounded-full bg-slate-800 p-3 shadow-2xl"
+            onClick={() => dispatch(toggleCreatePost(true))}
+            className="absolute bottom-0 right-0 z-10 m-8 flex rounded-full bg-slate-800 p-3 shadow-2xl"
           >
             <MdPostAdd className="cursor-pointer" color="white" size={32} />
           </div>

@@ -1,18 +1,18 @@
 import { IoMdClose } from "react-icons/io";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
 import useAppState from "@/hooks/useAppState";
 import { PulseLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { toggleCreatePost } from "@/redux/profile.slice";
 
-interface ICreatePost {
-  setVisibility: Dispatch<SetStateAction<boolean>>;
-}
-
-const CreatePost = ({ setVisibility }: ICreatePost) => {
+const CreatePost = () => {
   const { register, handleSubmit } = useForm();
   const { accessToken } = useAppState();
   const [isPosting, setIsPosting] = useState(false);
+
+  const dispatch = useDispatch();
 
   const onSubmit = handleSubmit(
     (data) => {
@@ -44,11 +44,11 @@ const CreatePost = ({ setVisibility }: ICreatePost) => {
   );
 
   return (
-    <div className="absolute flex h-full w-full items-center justify-center bg-black/50">
+    <div className="absolute z-10 flex h-full w-full items-center justify-center bg-black/50">
       <div className="flex flex-col rounded-md border border-stone-300 bg-white p-3">
         <div className="mb-4 flex justify-between border-b pb-2">
           <h1 className="font-bold">Post</h1>
-          <IoMdClose className="cursor-pointer" size={24} onClick={() => setVisibility(false)}>
+          <IoMdClose className="cursor-pointer" size={24} onClick={() => dispatch(toggleCreatePost(false))}>
             Close
           </IoMdClose>
         </div>

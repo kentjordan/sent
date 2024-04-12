@@ -9,7 +9,7 @@ const useLogout = () => {
     const router = useRouter();
 
     return () => {
-
+        // TODO: Fix logout, it can't remove refreshToken in the cookies
         (async () => {
             dispatch(resetAppState());
             dispatch(resetSentState());

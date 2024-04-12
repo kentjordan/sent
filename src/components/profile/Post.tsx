@@ -68,7 +68,10 @@ const Post = ({ post_id, first_name, last_name, content, profile_photo, created_
             <p className="text-sm text-red-500">Delete</p>
           </div>
           <div
-            onClick={() => dispatch(toggleUpdatePost(true))}
+            onClick={() => {
+              dispatch(toggleUpdatePost(true));
+              dispatch(setActivePost({ id: post_id, content }));
+            }}
             className="flex cursor-pointer items-center justify-start gap-2"
           >
             <MdEdit className="text-black" size={20} />

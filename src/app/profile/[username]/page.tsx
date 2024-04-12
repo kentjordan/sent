@@ -16,12 +16,11 @@ import { useRouter } from "next/navigation";
 import { MdPostAdd } from "react-icons/md";
 import CreatePost from "@/components/profile/CreatePost";
 import DeletePost from "@/components/profile/DeletePost";
+import UpdatePost from "@/components/profile/UpdatePost";
 
 const ProfilePage = (props: PageProps) => {
-  const { isEditProfileVisible, isSendMessageVisible, isCreatePostVisible, isDeletePostVisible } = useSelector<
-    RootState,
-    IProfileInitState
-  >((state) => state.profile);
+  const { isEditProfileVisible, isSendMessageVisible, isCreatePostVisible, isDeletePostVisible, isUpdatePostVisible } =
+    useSelector<RootState, IProfileInitState>((state) => state.profile);
 
   const dispatch = useDispatch();
 
@@ -60,8 +59,9 @@ const ProfilePage = (props: PageProps) => {
     <>
       {props.accessToken && (
         <div className="relative flex h-screen w-full justify-center">
-          {isDeletePostVisible && <DeletePost />}
           {isCreatePostVisible && <CreatePost />}
+          {isUpdatePostVisible && <UpdatePost />}
+          {isDeletePostVisible && <DeletePost />}
           <div
             onClick={() => dispatch(toggleCreatePost(true))}
             className="absolute bottom-0 right-0 z-10 m-8 flex rounded-full bg-slate-800 p-3 shadow-2xl"

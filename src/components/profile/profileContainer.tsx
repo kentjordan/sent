@@ -106,8 +106,9 @@ const MyProfileContainer = ({ username }: { username: string }) => {
       </div>
       <div className="my-4 flex flex-col items-center">
         {userPosts.length <= 0 && <h1 className="text-center font-bold">No posts yet</h1>}
-        {userPosts.map((post: any) => (
+        {userPosts.map((post: any, i: number) => (
           <Post
+            key={i}
             first_name={profile.first_name}
             last_name={profile.last_name}
             content={post.content}

@@ -117,6 +117,7 @@ const MyProfileContainer = ({ username }: { username: string }) => {
         {userPosts.map((post: IUserPost, i: number) => (
           <Post
             key={i}
+            user_id={post.user_id}
             post_id={post.id}
             first_name={profile.first_name}
             last_name={profile.last_name}

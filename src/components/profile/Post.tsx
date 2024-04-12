@@ -7,8 +7,10 @@ import { setActivePost, toggleDeletePost, toggleUpdatePost } from "@/redux/profi
 import { useState } from "react";
 import { MdClose, MdOutlineDeleteOutline } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
+import useAppState from "@/hooks/useAppState";
 
 interface IPost {
+  user_id: string;
   post_id: string;
   first_name: string;
   last_name: string;
@@ -17,10 +19,12 @@ interface IPost {
   created_at: string;
 }
 
-const Post = ({ post_id, first_name, last_name, content, profile_photo, created_at }: IPost) => {
+const Post = ({ user_id, post_id, first_name, last_name, content, profile_photo, created_at }: IPost) => {
   const dispatch = useDispatch();
 
   const [isPostMenuVisible, setPostMenuVisible] = useState(false);
+
+  const { user } = useAppState();
 
   return (
     <div className="relative flex w-full justify-between border-b py-4">
@@ -53,7 +57,11 @@ const Post = ({ post_id, first_name, last_name, content, profile_photo, created_
         </div>
       </div>
       <div className="mx-8 cursor-pointer">
-        <BsThreeDots onClick={() => setPostMenuVisible(!isPostMenuVisible)} size={20} />
+        {user?.id === user_id ? (
+          <BsThreeDots onClick={() => setPostMenuVisible(!isPostMenuVisible)} size={20} />
+        ) : (
+          <></>
+        )}
       </div>
       {isPostMenuVisible && (
         <div className="absolute right-0 top-0 m-2  flex flex-col gap-y-2 rounded-md border bg-white p-3 text-white shadow-lg">

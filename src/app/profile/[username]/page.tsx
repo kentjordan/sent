@@ -13,6 +13,8 @@ import { setActivePath } from "@/redux/app.slice";
 import { Button } from "@/components/ui/button";
 import useAppState from "@/hooks/useAppState";
 import { useRouter } from "next/navigation";
+import { MdPostAdd } from "react-icons/md";
+import CreatePost from "@/components/profile/CreatePost";
 
 const ProfilePage = (props: PageProps) => {
   const { isEditProfileVisible, isSendMessageVisible } = useSelector<RootState, IProfileInitState>(
@@ -52,10 +54,19 @@ const ProfilePage = (props: PageProps) => {
     dispatch(setActivePath("/profile"));
   }, [props.params.username]);
 
+  const [createPostDialogueVisibility, setCreatePostDialogueVisibility] = useState(false);
+
   return (
     <>
       {props.accessToken && (
-        <div className="relative flex h-screen w-full">
+        <div className="relative flex h-screen w-full justify-center">
+          {createPostDialogueVisibility && <CreatePost setVisibility={setCreatePostDialogueVisibility} />}
+          <div
+            onClick={() => setCreatePostDialogueVisibility(true)}
+            className="absolute bottom-0 right-0 m-8 flex rounded-full bg-slate-800 p-3 shadow-2xl"
+          >
+            <MdPostAdd className="cursor-pointer" color="white" size={32} />
+          </div>
           {isEditProfileVisible && <EditProfileDialog />}
           {isSendMessageVisible && <NewMessage />}
           <div className="flex w-full justify-center overflow-y-auto ">

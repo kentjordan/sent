@@ -8,6 +8,7 @@ import { IoPersonCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useAppState from "@/hooks/useAppState";
+import Post from "./Post";
 
 const MAX_CHAR_LENGTH = "56ch";
 
@@ -18,13 +19,14 @@ const MyProfileContainer = ({ username }: { username: string }) => {
   const [profile, setProfile] = useState({
     first_name: "Lorem",
     last_name: "Ipsum",
-    bio: "",
+    bio: "N/A",
     profilePhoto: undefined,
     coverPhoto: undefined,
-    username: "",
+    username: "N/A",
   });
 
   const [isDPLoading, setIsDPLoading] = useState(true);
+  const [userPosts, setUserPosts] = useState([]);
 
   useEffect(() => {
     const getProfile = async () => {
@@ -33,16 +35,20 @@ const MyProfileContainer = ({ username }: { username: string }) => {
       setProfile({ ...profile.data, profilePhoto: profilePhoto.data.url });
     };
 
+    const getUserPosts = async () => {
+      const res = await axios.get(`${process.env.API_HOSTNAME}/posts/${username}`);
+      setUserPosts(res.data);
+    };
+
     getProfile();
+    getUserPosts();
   }, []);
 
-  console.log(profile.profilePhoto);
-
   return (
-    <div className="w-full max-w-[56rem] border-l border-r border-l-stone-200 border-r-stone-200">
-      <div className="h-[200px] w-full bg-stone-200"></div>
-      {/* <Image className="" src="https://picsum.photos/1500/500" alt={"Profile Photo"} width={1500} height={500} /> */}
-      <div className="flex items-start justify-between border-b p-4 sm:px-6 sm:py-4">
+    <div className="h-fit w-full max-w-[56rem] border-l border-r border-l-stone-200 border-r-stone-200">
+      <div className="min-h-[200px] w-full bg-stone-200"></div>
+
+      <div className="flex items-start justify-between border-b p-4 sm:px-6 sm:pt-4">
         <div>
           {isDPLoading && profile.profilePhoto && (
             <div className="absolute z-20 mt-[-64px] h-24 w-24 rounded-full bg-stone-200 sm:h-32 sm:w-32"></div>
@@ -98,8 +104,17 @@ const MyProfileContainer = ({ username }: { username: string }) => {
           )}
         </div>
       </div>
-      <div className="flex h-56 items-center justify-center">
-        <h1>No posts yet</h1>
+      <div className="my-4 flex flex-col items-center">
+        {userPosts.length <= 0 && <h1 className="text-center font-bold">No posts yet</h1>}
+        {userPosts.map((post: any) => (
+          <Post
+            first_name={profile.first_name}
+            last_name={profile.last_name}
+            content={post.content}
+            created_at={post.created_at}
+            profile_photo={profile.profilePhoto}
+          />
+        ))}
       </div>
     </div>
   );

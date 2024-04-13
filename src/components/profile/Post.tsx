@@ -1,13 +1,14 @@
 import { DateTime } from "luxon";
 import Image from "next/image";
-import { IoHeartOutline, IoPersonCircle } from "react-icons/io5";
+import { IoHeart, IoHeartOutline, IoPersonCircle } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { setActivePost, toggleDeletePost, toggleUpdatePost } from "@/redux/profile.slice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdClose, MdOutlineDeleteOutline } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import useAppState from "@/hooks/useAppState";
+import axios, { AxiosError } from "axios";
 
 interface IPost {
   user_id: string;
@@ -20,11 +21,101 @@ interface IPost {
 }
 
 const Post = ({ user_id, post_id, first_name, last_name, content, profile_photo, created_at }: IPost) => {
+  // Hooks
   const dispatch = useDispatch();
+  const { user, accessToken } = useAppState();
 
+  // States
   const [isPostMenuVisible, setPostMenuVisible] = useState(false);
+  const [isPostLiked, setIsPostLiked] = useState(false);
+  const [postLikes, setPostLikes] = useState(0);
 
-  const { user } = useAppState();
+  const getPostLikesCount = async () => {
+    try {
+      const res = await axios.get(`${process.env.API_HOSTNAME}/post-reacts/${post_id}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      if (res.status === 200) {
+        setPostLikes(parseInt(res.data));
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(error.response);
+      }
+    }
+  };
+
+  // Check if the user liked the post
+  useEffect(() => {
+    const checkUserReact = async () => {
+      try {
+        const res = await axios.get(`${process.env.API_HOSTNAME}/post-reacts/${post_id}/user-react`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        if (res.data >= 1) {
+          setIsPostLiked(true);
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error(error.response);
+        }
+      }
+    };
+    checkUserReact();
+  }, []);
+
+  useEffect(() => {
+    getPostLikesCount();
+  }, [postLikes]);
+
+  // OnClick Functions
+  const onPostReact = () => {
+    const reactPost = async () => {
+      try {
+        const res = await axios.post(
+          `${process.env.API_HOSTNAME}/post-reacts/${post_id}`,
+          { react: "HEART" },
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          },
+        );
+
+        if (res.status === 201) {
+          // Reacted to post successfully
+          getPostLikesCount();
+          setIsPostLiked(true);
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error(error.response);
+        }
+      }
+    };
+    reactPost();
+  };
+
+  const onPostRemoveReact = () => {
+    const removeReactPost = async () => {
+      try {
+        const res = await axios.delete(`${process.env.API_HOSTNAME}/post-reacts/${post_id}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        if (res.status === 200) {
+          // Post deleted successfully
+          getPostLikesCount();
+          setIsPostLiked(false);
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error(error.response);
+        }
+      }
+    };
+    removeReactPost();
+  };
 
   return (
     <div className="relative flex w-full justify-between border-b py-4">
@@ -51,8 +142,13 @@ const Post = ({ user_id, post_id, first_name, last_name, content, profile_photo,
           <div className="mt-2">
             <p className="text-sm">{content}</p>
           </div>
-          <div className="mt-4">
-            <IoHeartOutline size={24} />
+          <div className="mt-4 flex gap-2">
+            {isPostLiked ? (
+              <IoHeart className="cursor-pointer" onClick={onPostRemoveReact} size={24} />
+            ) : (
+              <IoHeartOutline className="cursor-pointer" onClick={onPostReact} size={24} />
+            )}
+            <p>{postLikes}</p>
           </div>
         </div>
       </div>

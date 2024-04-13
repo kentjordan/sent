@@ -49,7 +49,7 @@ const EditProfileDialog = () => {
   }, []);
 
   return (
-    <div className="absolute flex h-full w-full items-center justify-center bg-black/50 sm:p-8">
+    <div className="absolute z-10 flex h-full w-full items-center justify-center bg-black/50 sm:p-8">
       <div className="flex h-full w-full max-w-[40rem] flex-col bg-white p-4 text-black sm:rounded-lg">
         <div className="mb-4 flex justify-between">
           <h1 className="text-base font-bold">Edit profile</h1>

@@ -33,7 +33,7 @@ const Follow = ({ profile_id }: IProfile) => {
       }
     };
 
-    checkFollowState();
+    if (profile_id) checkFollowState();
   }, [profile_id]);
 
   const onFollow = () => {

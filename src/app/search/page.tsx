@@ -51,7 +51,7 @@ const Search = () => {
       }
     };
     search();
-  }, [searchedUsers]);
+  }, [searchQuery]);
 
   if (isPageLoading) return <PageLoading />;
   return (

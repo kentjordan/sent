@@ -35,7 +35,9 @@ const EditProfileDialog = () => {
         },
       });
 
-      const profilePhoto = await axios.get(`${process.env.API_HOSTNAME}/images/profile-photo/${user?.id}`);
+      const profilePhoto = await axios.get(`${process.env.API_HOSTNAME}/images/profile-photo/${user?.id}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
 
       setValue("first_name", res.data.first_name);
       setValue("last_name", res.data.last_name);
@@ -45,8 +47,10 @@ const EditProfileDialog = () => {
         profilePhoto: profilePhoto.data.url,
       });
     };
-    getProfile();
-  }, []);
+    if (accessToken) {
+      getProfile();
+    }
+  }, [accessToken]);
 
   return (
     <div className="absolute z-10 flex h-full w-full items-center justify-center bg-black/50 sm:p-8">

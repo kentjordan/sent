@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { toggleNewMessage, setActiveChat } from "@/redux/sent.slice";
 import FoundUser from "./foundUser";
 import { IUser } from "@/app/search/page";
+import useAppState from "@/hooks/useAppState";
 
 let debounceTimerId: any;
 let DEBOUNCE_TIMEOUT: number = 800;
@@ -16,6 +17,8 @@ const NewMessage = () => {
   const dispatch = useDispatch();
   const [foundUsers, setFounderUsers] = useState<Array<IUser>>([]);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  const { accessToken } = useAppState();
 
   return (
     <div className="h-full w-full p-4 pl-8 sm:py-3">
@@ -41,7 +44,9 @@ const NewMessage = () => {
             setIsSearching(true);
 
             const findPerson = async () => {
-              const res = await axios.get(`${process.env.API_HOSTNAME}/users/search?q=${q}`);
+              const res = await axios.get(`${process.env.API_HOSTNAME}/users/search?q=${q}`, {
+                headers: { Authorization: `Bearer ${accessToken}` },
+              });
               setFounderUsers(res.data);
               setIsSearching(false);
             };

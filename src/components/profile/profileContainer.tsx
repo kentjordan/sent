@@ -38,21 +38,31 @@ const MyProfileContainer = ({ username }: { username: string }) => {
   const [isDPLoading, setIsDPLoading] = useState(true);
   const [userPosts, setUserPosts] = useState<Array<IUserPost>>([]);
 
+  const { accessToken } = useAppState();
+
   useEffect(() => {
     const getProfile = async () => {
-      const profile = await axios.get(`${process.env.API_HOSTNAME}/profiles/${username}`);
-      const profilePhoto = await axios.get(`${process.env.API_HOSTNAME}/images/profile-photo/${profile.data.id}`);
+      const profile = await axios.get(`${process.env.API_HOSTNAME}/profiles/${username}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const profilePhoto = await axios.get(`${process.env.API_HOSTNAME}/images/profile-photo/${profile.data.id}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       setProfile({ ...profile.data, profilePhoto: profilePhoto.data.url });
     };
 
     const getUserPosts = async () => {
-      const res = await axios.get(`${process.env.API_HOSTNAME}/posts/${username}`);
+      const res = await axios.get(`${process.env.API_HOSTNAME}/posts/${username}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       setUserPosts(res.data);
     };
 
-    getProfile();
-    getUserPosts();
-  }, []);
+    if (accessToken) {
+      getProfile();
+      getUserPosts();
+    }
+  }, [accessToken]);
 
   return (
     <div className="h-fit w-full max-w-[56rem] border-l border-r border-l-stone-200 border-r-stone-200">

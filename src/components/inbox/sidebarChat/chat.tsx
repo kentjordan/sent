@@ -44,7 +44,9 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
     checkSeenStatus();
 
     const getProfilePhoto = async () => {
-      const res = await axios.get(`${process.env.API_HOSTNAME}/images/profile-photo/${privateMessage.friend_id}`);
+      const res = await axios.get(`${process.env.API_HOSTNAME}/images/profile-photo/${privateMessage.friend_id}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       setProfilePhoto(res.data.url);
     };
 

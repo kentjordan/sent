@@ -31,10 +31,14 @@ const ProfilePage = (props: PageProps) => {
 
   const [isPageLoading, setIsPageLoading] = useState(true);
 
+  const { accessToken } = useAppState();
+
   useEffect(() => {
     const getProfileById = async () => {
       try {
-        const res = await axios.get(`${process.env.API_HOSTNAME}/profiles/${props.params.username}`);
+        const res = await axios.get(`${process.env.API_HOSTNAME}/profiles/${props.params.username}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
         dispatch(
           setActiveProfile({
             ...res.data,
@@ -51,12 +55,12 @@ const ProfilePage = (props: PageProps) => {
       }
     };
 
-    if (props.params.username) {
+    if (props.params.username && accessToken) {
       getProfileById();
     }
 
     dispatch(setActivePath("/profile"));
-  }, [props.params.username]);
+  }, [props.params.username, accessToken]);
 
   if (isPageLoading) return <PageLoading />;
 

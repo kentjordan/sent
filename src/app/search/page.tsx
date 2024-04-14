@@ -10,7 +10,7 @@ import useAppState from "@/hooks/useAppState";
 import Link from "next/link";
 import Image from "next/image";
 
-interface IUser {
+export interface IUser {
   user_id: string;
   first_name: string;
   last_name: string;

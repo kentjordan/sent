@@ -127,13 +127,13 @@ const Post = ({ username, user_id, post_id, first_name, last_name, content, prof
         {profile_photo ? (
           <Image
             src={profile_photo}
-            className="mx-4 h-8 w-8 rounded-full sm:h-12 sm:w-12"
+            className="min-h-8 min-w-8 mx-4 h-8 w-8 rounded-full"
             alt="Profile Photo"
             width={500}
             height={500}
           />
         ) : (
-          <IoPersonCircle className="mx-4 h-12 w-12 rounded-full text-stone-300" />
+          <IoPersonCircle className="min-h-8 min-w-8 mx-4 h-10 w-10 rounded-full text-stone-300" />
         )}
         <div className="flex flex-col justify-center">
           <div className="flex flex-wrap gap-1">

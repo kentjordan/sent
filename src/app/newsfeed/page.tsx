@@ -39,7 +39,7 @@ const Newsfeed = () => {
 
   if (isPageLoading) return <PageLoading />;
   return (
-    <div className="flex h-full w-full flex-col items-center justify-start">
+    <div className="flex w-full flex-col items-center justify-start overflow-auto">
       <div className="h-fit w-full max-w-[56rem] border-l border-r border-l-stone-200 border-r-stone-200">
         <div className="border-b p-4">
           <h1 className="text-xl font-bold">Feed</h1>

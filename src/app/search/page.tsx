@@ -55,7 +55,7 @@ const Search = () => {
 
   if (isPageLoading) return <PageLoading />;
   return (
-    <div className="flex h-full w-full justify-center">
+    <div className="flex w-full justify-center overflow-auto">
       <div>
         <div className="mb-8 mt-12 flex h-fit min-w-[300px] items-center gap-x-2">
           <input
@@ -71,7 +71,7 @@ const Search = () => {
           />
         </div>
         {searchQuery && (
-          <div>
+          <div className="p-8">
             <p>Search results</p>
             {searchedUsers.map((user: IUser) => {
               return (

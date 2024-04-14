@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import useAppState from "@/hooks/useAppState";
 import Post from "./Post";
+import Follow from "./Follow";
 
 const MAX_CHAR_LENGTH = "56ch";
 
@@ -25,6 +26,7 @@ const MyProfileContainer = ({ username }: { username: string }) => {
   const { user } = useAppState();
 
   const [profile, setProfile] = useState({
+    id: undefined,
     first_name: "Lorem",
     last_name: "Ipsum",
     bio: "N/A",
@@ -94,6 +96,7 @@ const MyProfileContainer = ({ username }: { username: string }) => {
               <BiMessageRounded className="cursor-pointer" color="white" size={22} />
             </Button>
           )}
+          {user?.username !== decodeURIComponent(username) && <Follow profile_id={profile.id} />}
           {/* {user?.id === user_id && (
             <Button
               // onClick={() => dispatch(toggleEditProfile())}
@@ -117,6 +120,7 @@ const MyProfileContainer = ({ username }: { username: string }) => {
         {userPosts.map((post: IUserPost, i: number) => (
           <Post
             key={i}
+            username={profile.username}
             user_id={post.user_id}
             post_id={post.id}
             first_name={profile.first_name}

@@ -9,8 +9,10 @@ import { MdClose, MdOutlineDeleteOutline } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import useAppState from "@/hooks/useAppState";
 import axios, { AxiosError } from "axios";
+import Link from "next/link";
 
-interface IPost {
+export interface IPost {
+  username: string;
   user_id: string;
   post_id: string;
   first_name: string;
@@ -20,7 +22,7 @@ interface IPost {
   created_at: string;
 }
 
-const Post = ({ user_id, post_id, first_name, last_name, content, profile_photo, created_at }: IPost) => {
+const Post = ({ username, user_id, post_id, first_name, last_name, content, profile_photo, created_at }: IPost) => {
   // Hooks
   const dispatch = useDispatch();
   const { user, accessToken } = useAppState();
@@ -131,24 +133,24 @@ const Post = ({ user_id, post_id, first_name, last_name, content, profile_photo,
             height={500}
           />
         ) : (
-          <IoPersonCircle className="mx-4 h-12 w-12 rounded-full sm:h-16 sm:w-16" />
+          <IoPersonCircle className="mx-4 h-12 w-12 rounded-full text-stone-300" />
         )}
         <div className="flex flex-col justify-center">
           <div className="flex flex-wrap gap-1">
-            <h1 className="text-sm font-bold">
+            <Link href={`/profile/${username}`} className="text-sm font-bold">
               {first_name} {last_name}
-            </h1>
+            </Link>
             <p className="text-sm text-stone-400">•</p>
             <p className="text-sm text-stone-400">{DateTime.fromISO(created_at).toRelative({ style: "short" })}</p>
           </div>
           <div className="mt-2">
             <p className="text-sm">{content}</p>
           </div>
-          <div className="mt-4 flex gap-2">
+          <div className="mt-4 flex items-center gap-2">
             {isPostLiked ? (
-              <IoHeart className="cursor-pointer" onClick={onPostRemoveReact} size={24} />
+              <IoHeart className="cursor-pointer text-red-500" onClick={onPostRemoveReact} size={20} />
             ) : (
-              <IoHeartOutline className="cursor-pointer" onClick={onPostReact} size={24} />
+              <IoHeartOutline className="cursor-pointer" onClick={onPostReact} size={20} />
             )}
             <p>{postLikes}</p>
           </div>

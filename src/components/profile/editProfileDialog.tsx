@@ -8,7 +8,7 @@ import { TbCameraPlus } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 
 import { toggleEditProfile } from "@/redux/profile.slice";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import axios from "axios";
 import useAppState from "@/hooks/useAppState";
 
@@ -27,7 +27,7 @@ const EditProfileDialog = () => {
     coverPhoto: undefined,
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const getProfile = async () => {
       const res = await axios.get(`${process.env.API_HOSTNAME}/profiles`, {
         headers: {

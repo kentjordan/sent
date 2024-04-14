@@ -97,7 +97,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
             height={96}
             alt="profile photo"
             src={profilePhoto}
-            className="h-[40px] w-[40px] rounded-full"
+            className="h-[40px] min-h-[40px] w-[40px] min-w-[40px] rounded-full"
           />
         )}
         {!profilePhoto && <IoPersonCircle className="h-[50px] w-[50px] rounded-full text-stone-300" />}

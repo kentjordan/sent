@@ -34,7 +34,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
       auth: {
         user_id: user?.id as string,
       },
-      path: "/sent/ws/socket.io",
+      path: process.env.NODE_ENV === "production" ? "/sent/ws/socket.io" : "/socket.io",
     });
 
     socket.on("inbox", () => {
@@ -97,10 +97,10 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
             height={96}
             alt="profile photo"
             src={profilePhoto}
-            className="min-h-[32px] min-w-[32px] rounded-full sm:h-[3rem] sm:w-[3rem]"
+            className="h-[40px] w-[40px] rounded-full"
           />
         )}
-        {!profilePhoto && <IoPersonCircle className="min-h-[3rem] min-w-[3rem] rounded-full" />}
+        {!profilePhoto && <IoPersonCircle className="h-[50px] w-[50px] rounded-full text-stone-300" />}
         <div className="mx-4 hidden flex-col justify-center text-xs sm:flex md:text-sm">
           <h1 className={`${isSeen ? "font-normal" : "font-bold"}`}>
             {privateMessage.first_name} {privateMessage.last_name}

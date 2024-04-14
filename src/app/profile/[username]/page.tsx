@@ -17,6 +17,7 @@ import { MdPostAdd } from "react-icons/md";
 import CreatePost from "@/components/profile/CreatePost";
 import DeletePost from "@/components/profile/DeletePost";
 import UpdatePost from "@/components/profile/UpdatePost";
+import PageLoading from "@/components/PageLoading";
 
 const ProfilePage = (props: PageProps) => {
   const { isEditProfileVisible, isSendMessageVisible, isCreatePostVisible, isDeletePostVisible, isUpdatePostVisible } =
@@ -24,21 +25,23 @@ const ProfilePage = (props: PageProps) => {
 
   const dispatch = useDispatch();
 
-  const [isUserFound, setIsUserFound] = useState(false);
+  const [isUserFound, setIsUserFound] = useState(true);
   const { user } = useAppState();
   const router = useRouter();
+
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
     const getProfileById = async () => {
       try {
         const res = await axios.get(`${process.env.API_HOSTNAME}/profiles/${props.params.username}`);
-        setIsUserFound(true);
         dispatch(
           setActiveProfile({
             ...res.data,
             userId: res.data.id,
           }),
         );
+        setIsPageLoading(false);
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.status === 404) {
@@ -54,6 +57,8 @@ const ProfilePage = (props: PageProps) => {
 
     dispatch(setActivePath("/profile"));
   }, [props.params.username]);
+
+  if (isPageLoading) return <PageLoading />;
 
   return (
     <>
@@ -71,7 +76,9 @@ const ProfilePage = (props: PageProps) => {
           {isEditProfileVisible && <EditProfileDialog />}
           {isSendMessageVisible && <NewMessage />}
           <div className="flex w-full justify-center overflow-y-auto ">
+            {/* User Found */}
             {isUserFound && <ProfileContainer username={props.params.username} />}
+            {/* User NOT found */}
             {!isUserFound && (
               <div className="flex h-full w-full flex-col items-center justify-center gap-4">
                 <h1 className="text-lg font-bold">Profile not found</h1>

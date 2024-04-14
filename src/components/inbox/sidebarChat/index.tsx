@@ -41,7 +41,7 @@ const SideBar = () => {
       auth: {
         user_id: user?.id as string,
       },
-      path: "/sent/ws/socket.io",
+      path: process.env.NODE_ENV === "production" ? "/sent/ws/socket.io" : "/socket.io",
     });
 
     socket.on("inbox", (data) => {

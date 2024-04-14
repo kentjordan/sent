@@ -3,25 +3,18 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
-import Image from "next/image";
 import { PulseLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { toggleNewMessage, setActiveChat } from "@/redux/sent.slice";
-import useAppState from "@/hooks/useAppState";
 import FoundUser from "./foundUser";
-
-interface IFoundUser {
-  id: string;
-  first_name: string;
-  last_name: string;
-}
+import { IUser } from "@/app/search/page";
 
 let debounceTimerId: any;
 let DEBOUNCE_TIMEOUT: number = 800;
 
 const NewMessage = () => {
   const dispatch = useDispatch();
-  const [foundUsers, setFounderUsers] = useState<Array<IFoundUser>>([]);
+  const [foundUsers, setFounderUsers] = useState<Array<IUser>>([]);
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
   return (
@@ -65,8 +58,8 @@ const NewMessage = () => {
         {isSearching && <PulseLoader size={8} />}
       </div>
       <div className="flex w-full flex-col">
-        {foundUsers.map((e, i) => {
-          return <FoundUser key={e.id} {...e} />;
+        {foundUsers.map((user: IUser, i) => {
+          return <FoundUser key={user.user_id} {...user} />;
         })}
       </div>
     </div>

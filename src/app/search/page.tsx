@@ -9,6 +9,8 @@ import axios, { AxiosError } from "axios";
 import useAppState from "@/hooks/useAppState";
 import Link from "next/link";
 import Image from "next/image";
+import { SlUserFollowing } from "react-icons/sl";
+import { IoPersonSharp } from "react-icons/io5";
 
 export interface IUser {
   user_id: string;
@@ -56,7 +58,7 @@ const Search = () => {
   if (isPageLoading) return <PageLoading />;
   return (
     <div className="flex w-full justify-center overflow-auto">
-      <div>
+      <div className="px-2">
         <div className="mb-8 mt-12 flex h-fit min-w-[300px] items-center gap-x-2">
           <input
             onChange={(e) => {
@@ -65,36 +67,49 @@ const Search = () => {
                 setSearchQuery(e.target.value);
               }, timeout);
             }}
-            className="w-full rounded-lg border border-slate-800 p-2 outline-slate-800"
+            className="stone-300 w-full rounded-lg border p-2 outline-slate-800"
             type="text"
             placeholder="Search user"
           />
         </div>
         {searchQuery && (
-          <div className="p-8">
+          <div>
             <p>Search results</p>
             {searchedUsers.map((user: IUser) => {
               return (
-                <div key={user.user_id} className="my-3 flex rounded-md border p-6">
+                <div key={user.user_id} className="my-2 flex rounded-md border px-4 py-3">
                   {user.profile_photo ? (
                     <Image
                       src={user.profile_photo}
-                      className="mr-6 h-8 w-8 rounded-full sm:h-12 sm:w-12"
+                      className="mr-4 h-8 w-8 rounded-full sm:h-12 sm:w-12"
                       alt="Profile Photo"
-                      width={500}
-                      height={500}
+                      width={64}
+                      height={64}
                     />
                   ) : (
-                    <IoPersonCircle className="mr-6 h-12 w-12 rounded-full text-stone-300" />
+                    <div>
+                      <IoPersonCircle className="mr-4 h-10 w-10 rounded-full text-stone-300 sm:h-14 sm:w-14" />
+                    </div>
                   )}
                   <div>
                     <div className="flex flex-col">
-                      <Link href={`/profile/${user.username}`} className="font-bold">
+                      <Link href={`/profile/${user.username}`} className="text-sm font-bold">
                         {user.first_name} {user.last_name}
                       </Link>
-                      <p className="text-sm text-stone-500">{user.bio}</p>
+                      <div className="mt-2 flex items-center gap-x-2">
+                        <IoPersonSharp className="text-stone-500" size={12} />
+                        <p className="text-xs text-stone-500">
+                          {user.followers_count ? user.followers_count : 0} followers
+                        </p>
+                      </div>
+                      {user.bio ? (
+                        <p className="mt-3 max-w-[24ch] overflow-hidden text-ellipsis text-xs text-stone-500">
+                          {user.bio}
+                        </p>
+                      ) : (
+                        <></>
+                      )}
                     </div>
-                    <p className="mt-2 text-sm">{user.followers_count ? user.followers_count : 0} followers</p>
                   </div>
                 </div>
               );

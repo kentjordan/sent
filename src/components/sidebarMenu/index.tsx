@@ -5,6 +5,8 @@ import { CiLogout } from "react-icons/ci";
 import useLogout from "@/hooks/useLogout";
 import useAppState from "@/hooks/useAppState";
 import { useRouter } from "next/navigation";
+import { LuNewspaper } from "react-icons/lu";
+import { IoSearch } from "react-icons/io5";
 
 const SidebarMenu = () => {
   const { activePath } = useAppState();
@@ -15,23 +17,35 @@ const SidebarMenu = () => {
 
   if (accessToken) {
     return (
-      <div className="flex h-full w-14 flex-col justify-between bg-stone-100 px-2 sm:py-4">
-        <div className="mt-4 flex flex-col items-center justify-center sm:m-0">
+      <div className="flex h-full w-14 flex-col items-center justify-between bg-stone-100">
+        <div className="flex flex-col items-center justify-center gap-y-2 sm:m-0">
+          <div
+            onClick={() => router.replace("/search")}
+            className={`cursor-pointer rounded-lg ${activePath === "/search" ? " bg-stone-300" : ""} m-2 p-1`}
+          >
+            <IoSearch className="cursor-pointer" color="black" size={24} />
+          </div>
           <div
             onClick={() => router.replace(`/profile/${user?.username}`)}
-            className={`mb-4 cursor-pointer rounded-lg ${activePath === "/profile" ? " bg-stone-300" : ""} p-1`}
+            className={`cursor-pointer rounded-lg ${activePath === "/profile" ? " bg-stone-300" : ""} m-2 p-1`}
           >
             <IoPersonCircleOutline className="cursor-pointer" size={24} />
           </div>
           <div
             onClick={() => router.replace("/inbox")}
-            className={`mb-4 cursor-pointer rounded-lg ${activePath === "/inbox" ? " bg-stone-300" : ""} p-1`}
+            className={`cursor-pointer rounded-lg ${activePath === "/inbox" ? " bg-stone-300" : ""} m-2 p-1`}
           >
             <BiMessageRounded className="cursor-pointer" color="black" size={24} />
           </div>
+          <div
+            onClick={() => router.replace("/newsfeed")}
+            className={`cursor-pointer rounded-lg ${activePath === "/newsfeed" ? " bg-stone-300" : ""} m-2 p-1`}
+          >
+            <LuNewspaper className="cursor-pointer" color="black" size={20} />
+          </div>
         </div>
-        <div onClick={logout} className="mb-4 flex cursor-pointer flex-col items-center justify-center sm:m-0">
-          <CiLogout size={24} />
+        <div onClick={logout} className="flex w-full cursor-pointer flex-col items-center justify-center p-3 sm:m-0">
+          <CiLogout className="font-bold text-red-700" size={24} />
         </div>
       </div>
     );

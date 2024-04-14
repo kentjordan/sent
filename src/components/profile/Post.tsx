@@ -123,17 +123,19 @@ const Post = ({ username, user_id, post_id, first_name, last_name, content, prof
 
   return (
     <div className="relative flex w-full justify-between border-b py-4">
-      <div className="flex ">
+      <div className="flex flex-1">
         {profile_photo ? (
           <Image
             src={profile_photo}
             className="min-h-8 min-w-8 mx-4 h-8 w-8 rounded-full"
             alt="Profile Photo"
-            width={500}
-            height={500}
+            width={64}
+            height={64}
           />
         ) : (
-          <IoPersonCircle className="min-h-8 min-w-8 mx-4 h-10 w-10 rounded-full text-stone-300" />
+          <div className="flex">
+            <IoPersonCircle className="min-h-8 min-w-8 mx-3 h-12 w-12  rounded-full text-stone-300" />
+          </div>
         )}
         <div className="flex flex-col justify-center">
           <div className="flex flex-wrap gap-1">

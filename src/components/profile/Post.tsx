@@ -74,6 +74,7 @@ const Post = ({ user_id, post_id, first_name, last_name, content, profile_photo,
   const onPostReact = () => {
     const reactPost = async () => {
       try {
+        setIsPostLiked(true);
         const res = await axios.post(
           `${process.env.API_HOSTNAME}/post-reacts/${post_id}`,
           { react: "HEART" },
@@ -99,6 +100,7 @@ const Post = ({ user_id, post_id, first_name, last_name, content, profile_photo,
   const onPostRemoveReact = () => {
     const removeReactPost = async () => {
       try {
+        setIsPostLiked(false);
         const res = await axios.delete(`${process.env.API_HOSTNAME}/post-reacts/${post_id}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });

@@ -35,7 +35,7 @@ const NewMessage = () => {
   }, [isSuccess]);
 
   return (
-    <div className="absolute flex h-full w-full justify-center bg-black/50 sm:p-8">
+    <div className="absolute z-10 flex h-full w-full justify-center bg-black/50 sm:p-8">
       <div className="flex w-full max-w-[40rem] flex-col justify-between bg-white p-4 text-black sm:rounded-lg">
         <div className="flex h-full flex-col justify-between">
           <div>

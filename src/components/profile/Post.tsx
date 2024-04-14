@@ -123,7 +123,7 @@ const Post = ({ username, user_id, post_id, first_name, last_name, content, prof
 
   return (
     <div className="relative flex w-full justify-between border-b py-4">
-      <div className="flex flex-1">
+      <div className="flex">
         {profile_photo ? (
           <Image
             src={profile_photo}

@@ -16,6 +16,7 @@ export interface IProfileInitState {
     isCreatePostVisible: boolean
     isDeletePostVisible: boolean
     isUpdatePostVisible: boolean
+    isFollowersDialogVisible: boolean
 }
 
 export interface IProfileState extends IProfileInitState { }
@@ -35,6 +36,7 @@ const initialState: IProfileState = {
     isCreatePostVisible: false,
     isUpdatePostVisible: false,
     isDeletePostVisible: false,
+    isFollowersDialogVisible: false,
 }
 
 const profileSlice = createSlice({
@@ -61,6 +63,9 @@ const profileSlice = createSlice({
         },
         toggleDeletePost: (state, action: PayloadAction<boolean>) => {
             state.isDeletePostVisible = action.payload
+        },
+        toggleFollowersDialog: (state, action: PayloadAction<boolean>) => {
+            state.isFollowersDialogVisible = action.payload
         }
     }
 });
@@ -72,6 +77,7 @@ export const {
     toggleCreatePost,
     toggleUpdatePost,
     toggleDeletePost,
-    setActivePost
+    setActivePost,
+    toggleFollowersDialog
 } = profileSlice.actions;
 export const profileReducer = profileSlice.reducer;

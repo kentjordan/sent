@@ -3,13 +3,13 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { BiMessageRounded } from "react-icons/bi";
 import { useDispatch } from "react-redux";
-import { toggleSendMessage, toggleEditProfile } from "@/redux/profile.slice";
+import { toggleSendMessage, toggleEditProfile, toggleFollowersDialog } from "@/redux/profile.slice";
 import { IoPersonCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useAppState from "@/hooks/useAppState";
 import Post from "./Post";
-import Follow from "./Follow";
+import FollowButton from "./FollowButton";
 
 const MAX_CHAR_LENGTH = "56ch";
 
@@ -19,6 +19,7 @@ interface IUserPost {
   updated_at: string;
   content: string;
   user_id: string;
+  followers: number;
 }
 
 const MyProfileContainer = ({ username }: { username: string }) => {
@@ -33,6 +34,7 @@ const MyProfileContainer = ({ username }: { username: string }) => {
     profilePhoto: undefined,
     coverPhoto: undefined,
     username: "N/A",
+    followers: 0,
   });
 
   const [isDPLoading, setIsDPLoading] = useState(true);
@@ -96,6 +98,12 @@ const MyProfileContainer = ({ username }: { username: string }) => {
           </h1>
           <p className="text-sm text-stone-400">@{profile.username}</p>
           <p className={`line-clamp-4 sm:line-clamp-2 max-w-[${MAX_CHAR_LENGTH}] my-4 text-sm`}>{profile.bio}</p>
+          <p
+            onClick={() => dispatch(toggleFollowersDialog(true))}
+            className="my-4 w-fit cursor-pointer text-sm text-stone-500 hover:border-b"
+          >
+            {profile.followers} followers
+          </p>
         </div>
         <div className="flex items-center">
           {user?.username !== decodeURIComponent(username) && (
@@ -106,7 +114,7 @@ const MyProfileContainer = ({ username }: { username: string }) => {
               <BiMessageRounded className="cursor-pointer" color="white" size={22} />
             </Button>
           )}
-          {user?.username !== decodeURIComponent(username) && <Follow profile_id={profile.id} />}
+          {user?.username !== decodeURIComponent(username) && <FollowButton profile_id={profile.id} />}
           {/* {user?.id === user_id && (
             <Button
               // onClick={() => dispatch(toggleEditProfile())}

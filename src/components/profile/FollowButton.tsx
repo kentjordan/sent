@@ -9,14 +9,14 @@ interface IProfile {
   profile_id?: string;
 }
 
-const Follow = ({ profile_id }: IProfile) => {
+const FollowButton = ({ profile_id }: IProfile) => {
   const { accessToken } = useAppState();
 
   const [isFollowingUser, setFollowingUser] = useState(false);
   useLayoutEffect(() => {
     const checkFollowState = async () => {
       try {
-        const res = await axios.get(`${process.env.API_HOSTNAME}/followers/${profile_id}`, {
+        const res = await axios.get(`${process.env.API_HOSTNAME}/followers/${profile_id}/state`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -101,4 +101,4 @@ const Follow = ({ profile_id }: IProfile) => {
   );
 };
 
-export default Follow;
+export default FollowButton;

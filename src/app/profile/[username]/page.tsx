@@ -18,10 +18,17 @@ import CreatePost from "@/components/profile/CreatePost";
 import DeletePost from "@/components/profile/DeletePost";
 import UpdatePost from "@/components/profile/UpdatePost";
 import PageLoading from "@/components/PageLoading";
+import Followers from "@/components/profile/Followers";
 
 const ProfilePage = (props: PageProps) => {
-  const { isEditProfileVisible, isSendMessageVisible, isCreatePostVisible, isDeletePostVisible, isUpdatePostVisible } =
-    useSelector<RootState, IProfileInitState>((state) => state.profile);
+  const {
+    isEditProfileVisible,
+    isSendMessageVisible,
+    isCreatePostVisible,
+    isDeletePostVisible,
+    isUpdatePostVisible,
+    isFollowersDialogVisible,
+  } = useSelector<RootState, IProfileInitState>((state) => state.profile);
 
   const dispatch = useDispatch();
 
@@ -68,6 +75,7 @@ const ProfilePage = (props: PageProps) => {
     <>
       {props.accessToken && (
         <div className="relative flex h-screen w-full justify-center">
+          {isFollowersDialogVisible && <Followers username={props.params.username} />}
           {isCreatePostVisible && <CreatePost />}
           {isUpdatePostVisible && <UpdatePost />}
           {isDeletePostVisible && <DeletePost />}

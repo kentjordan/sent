@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IoClose, IoPersonCircle } from "react-icons/io5";
 import { useDispatch } from "react-redux";
+import { PulseLoader } from "react-spinners";
 
 interface IUserFollower {
   first_name: string;
@@ -25,6 +26,8 @@ const Followers = ({ username }: IFollowersProps) => {
 
   const dispatch = useDispatch();
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const getUserFollowers = async () => {
       try {
@@ -33,8 +36,10 @@ const Followers = ({ username }: IFollowersProps) => {
         });
         if (res.status === 200) {
           setFollowers(res.data);
+          setIsLoading(false);
         }
       } catch (error) {
+        setIsLoading(false);
         if (error instanceof AxiosError) {
           console.error(error);
         }
@@ -52,35 +57,41 @@ const Followers = ({ username }: IFollowersProps) => {
           <IoClose onClick={() => dispatch(toggleFollowersDialog(false))} className="cursor-pointer" size={20} />
         </div>
         {/* Followers */}
-        <div className="max-h-96 overflow-auto">
-          {followers.length <= 0 && <p>There is no followers. ☹️</p>}
+        {isLoading ? (
+          <div className="m-4 flex items-center justify-center">
+            <PulseLoader size={8} />
+          </div>
+        ) : (
+          <div className="max-h-96 overflow-auto">
+            {followers.length <= 0 && <p>There is no followers. ☹️</p>}
 
-          {followers.map((follower: IUserFollower, i: number) => {
-            return (
-              <div key={follower.username} className="flex items-center gap-x-2 p-2">
-                {follower.profile_photo ? (
-                  <Image
-                    src={follower.profile_photo}
-                    className="mr-1 h-10 w-10 rounded-full p-[2px]"
-                    alt="Profile Photo"
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <IoPersonCircle size={40} className="mr-1 rounded-full text-stone-300" />
-                )}
+            {followers.map((follower: IUserFollower, i: number) => {
+              return (
+                <div key={follower.username} className="flex items-center gap-x-2 p-2">
+                  {follower.profile_photo ? (
+                    <Image
+                      src={follower.profile_photo}
+                      className="mr-1 h-10 w-10 rounded-full p-[2px]"
+                      alt="Profile Photo"
+                      width={24}
+                      height={24}
+                    />
+                  ) : (
+                    <IoPersonCircle size={40} className="mr-1 rounded-full text-stone-300" />
+                  )}
 
-                <Link
-                  href={`/profile/${follower.username}`}
-                  onClick={() => dispatch(toggleFollowersDialog(false))}
-                  className="text-base font-medium"
-                >
-                  {follower.first_name} {follower.last_name}
-                </Link>
-              </div>
-            );
-          })}
-        </div>
+                  <Link
+                    href={`/profile/${follower.username}`}
+                    onClick={() => dispatch(toggleFollowersDialog(false))}
+                    className="text-base font-medium"
+                  >
+                    {follower.first_name} {follower.last_name}
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

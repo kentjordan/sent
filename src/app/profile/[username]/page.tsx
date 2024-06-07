@@ -74,20 +74,20 @@ const ProfilePage = (props: PageProps) => {
   return (
     <>
       {props.accessToken && (
-        <div className="relative flex h-screen w-full justify-center">
+        <div className="relative flex h-screen w-full justify-center pb-12 lg:pb-0">
           {isFollowersDialogVisible && <Followers username={props.params.username} />}
           {isCreatePostVisible && <CreatePost />}
           {isUpdatePostVisible && <UpdatePost />}
           {isDeletePostVisible && <DeletePost />}
           <div
             onClick={() => dispatch(toggleCreatePost(true))}
-            className="absolute bottom-0 right-0 z-10 m-8 flex rounded-full bg-slate-800 p-3 shadow-2xl"
+            className="absolute bottom-0 right-0 z-10 mb-20 mr-6 flex rounded-full bg-slate-800 p-3 shadow-2xl lg:mb-6"
           >
             <MdPostAdd className="cursor-pointer" color="white" size={32} />
           </div>
           {isEditProfileVisible && <EditProfileDialog />}
           {isSendMessageVisible && <NewMessage />}
-          <div className="flex w-full justify-center overflow-y-auto ">
+          <div className="flex w-full justify-center overflow-y-auto">
             {/* User Found */}
             {isUserFound && <ProfileContainer username={props.params.username} />}
             {/* User NOT found */}

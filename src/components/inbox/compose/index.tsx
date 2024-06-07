@@ -13,6 +13,9 @@ import useAppState from "@/hooks/useAppState";
 import useSentState from "@/hooks/useSentState";
 import { GoLinkExternal } from "react-icons/go";
 import { useRouter } from "next/navigation";
+import { IoIosArrowBack } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { setActiveChat } from "@/redux/sent.slice";
 
 let socket: Socket;
 const textLineHieght = 24;
@@ -34,6 +37,8 @@ const ComposeMessage = () => {
         },
       }),
   });
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     socket = io(process.env.WS_GATEWAY_CHAT as string, {
@@ -76,18 +81,36 @@ const ComposeMessage = () => {
 
   const router = useRouter();
 
+  const onCloseChatCompose = () => {
+    dispatch(
+      setActiveChat({
+        is_visible: false,
+        chat_id: undefined,
+        first_name: "",
+        last_name: "",
+        friend_id: undefined,
+        message_id: undefined,
+        username: undefined,
+      }),
+    );
+  };
   return (
-    <div className="flex max-h-screen w-full flex-1 flex-col">
-      <div className="flex w-full flex-col justify-center border-b bg-white p-4 ">
-        <h1 className="text-lg font-bold">
-          {active_chat.first_name} {active_chat.last_name}
-        </h1>
-        <div
-          onClick={() => router.replace(`/profile/${active_chat.username}`)}
-          className="flex cursor-pointer items-center"
-        >
-          <p className="text-sm">Visit profile</p>
-          <GoLinkExternal className="mx-2" size={16} />
+    <div className="fixed z-50 flex h-full max-h-screen w-full flex-1 flex-col bg-white">
+      <div className="flex w-full flex-col justify-center border-b bg-white p-2">
+        <div className="flex items-center">
+          <IoIosArrowBack className="cursor-pointer" size={32} onClick={onCloseChatCompose} />
+          <div className="ml-6">
+            <h1 className="text-base font-bold">
+              {active_chat.first_name} {active_chat.last_name}
+            </h1>
+            <div
+              onClick={() => router.replace(`/profile/${active_chat.username}`)}
+              className="flex cursor-pointer items-center"
+            >
+              <p className="text-sm">Visit profile</p>
+              <GoLinkExternal className="mx-2" size={16} />
+            </div>
+          </div>
         </div>
       </div>
       <div id="compose_message" className="flex h-full flex-col overflow-y-scroll scroll-smooth p-2">

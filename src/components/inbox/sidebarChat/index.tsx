@@ -52,14 +52,14 @@ const SideBar = () => {
   }, []);
 
   return (
-    <div className="relative flex h-full flex-col items-start overflow-auto p-0 sm:pr-4 sm:pt-4 md:min-w-[24rem] md:max-w-[24rem]">
+    <div className="relative flex h-full w-full max-w-[800px] flex-col items-start overflow-auto px-2">
       {is_new_message_visible ? (
         <NewMessage />
       ) : (
         <>
-          <div className="mb-4 flex w-full items-center justify-between  sm:py-0">
-            <h1 className=" text-md ml-8 hidden font-bold sm:flex md:text-xl">Messages</h1>
-            <div className="z-10 m-4 flex w-full justify-center sm:justify-end">
+          <div className="flex w-full items-center justify-between px-3 py-6">
+            <h1 className=" text-md flex text-xl font-bold">Messages</h1>
+            <div className="z-10 flex justify-end">
               <RiChatNewLine onClick={() => dispatch(toggleNewMessage())} size={24} className="cursor-pointer" />
             </div>
           </div>
@@ -85,7 +85,7 @@ const SideBar = () => {
               </span>
             </div>
           ) : (
-            <div className="flex h-full w-full flex-col items-start overflow-y-auto">
+            <div className="flex h-full w-full flex-col items-center justify-start overflow-y-auto">
               {chatPrivateMessages.map((private_message: IPrivateMessage, i) => {
                 return <SidebarChat key={private_message.id} {...private_message} />;
               })}

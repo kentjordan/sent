@@ -55,7 +55,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
 
   return (
     <div
-      className="relative my-3 flex w-full cursor-pointer items-center justify-start pr-4 sm:justify-between"
+      className="flex w-full cursor-pointer  items-center py-2"
       onClick={() => {
         dispatch(
           setActiveChat({
@@ -86,13 +86,15 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
         seenMessage();
       }}
     >
-      <div className="flex items-center justify-start ">
+      <div className="flex w-full items-center">
+        {/* Seen */}
         <div
+          className="mr-2 min-h-[6px] min-w-[6px] rounded-full bg-slate-700 sm:flex"
           style={{
             opacity: isSeen ? 0 : 1,
           }}
-          className="mx-2 min-h-[6px] min-w-[6px] rounded-full bg-slate-700 sm:flex"
         ></div>
+        {/* Seen */}
         {profilePhoto && (
           <Image
             width={96}
@@ -103,23 +105,23 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
           />
         )}
         {!profilePhoto && <IoPersonCircle className="h-[50px] w-[50px] rounded-full text-stone-300" />}
-        <div className="mx-4 hidden flex-col justify-center text-xs sm:flex md:text-sm">
+        <div className="mx-4 flex w-[65%] flex-col justify-center text-xs md:text-sm">
           <h1 className={`${isSeen ? "font-normal" : "font-bold"}`}>
             {privateMessage.first_name} {privateMessage.last_name}
           </h1>
           <span
             className={`${
               isSeen ? "font-normal" : "font-bold"
-            } max-w-[22ch] overflow-hidden overflow-ellipsis whitespace-nowrap`}
+            } max-w-full overflow-hidden overflow-ellipsis whitespace-nowrap`}
           >
             {user?.id === privateMessage.friend_id ? "You: " : ""}
             {privateMessage.message}
           </span>
         </div>
+        <span className="absolute right-0 mx-4 flex w-fit text-[10px] text-stone-500">
+          {getInboxMessageTime(privateMessage.created_at)}
+        </span>
       </div>
-      <span className="hidden w-fit text-[10px] text-stone-500 md:flex">
-        {getInboxMessageTime(privateMessage.created_at)}
-      </span>
     </div>
   );
 };

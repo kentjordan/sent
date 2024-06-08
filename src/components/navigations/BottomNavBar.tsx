@@ -1,5 +1,4 @@
 import useAppState from "@/hooks/useAppState";
-import useLogout from "@/hooks/useLogout";
 import { useRouter } from "next/navigation";
 import { BiMessageRounded } from "react-icons/bi";
 import { IoSearch, IoPersonCircleOutline } from "react-icons/io5";
@@ -7,11 +6,11 @@ import { LuNewspaper } from "react-icons/lu";
 
 const BottomNavBar = () => {
   const { activePath } = useAppState();
-
-  const logout = useLogout();
   const router = useRouter();
-  const { user, accessToken } = useAppState();
-
+  const { user } = useAppState();
+  if (activePath === "/login" || activePath === "/signup") {
+    return <></>;
+  }
   return (
     <div className="fixed bottom-0 h-16 w-full border-t bg-white lg:hidden">
       <div className="flex h-full items-center justify-center gap-y-2 sm:m-0">

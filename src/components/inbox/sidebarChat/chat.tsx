@@ -55,7 +55,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
 
   return (
     <div
-      className="flex w-full cursor-pointer  items-center py-2"
+      className="flex w-full cursor-pointer  items-center py-3"
       onClick={() => {
         dispatch(
           setActiveChat({
@@ -105,7 +105,7 @@ const SidebarChat = (privateMessage: IPrivateMessage) => {
           />
         )}
         {!profilePhoto && <IoPersonCircle className="h-[50px] w-[50px] rounded-full text-stone-300" />}
-        <div className="mx-4 flex w-[65%] flex-col justify-center text-xs md:text-sm">
+        <div className="mx-4 flex w-[65%] flex-col justify-center text-xs md:text-base">
           <h1 className={`${isSeen ? "font-normal" : "font-bold"}`}>
             {privateMessage.first_name} {privateMessage.last_name}
           </h1>

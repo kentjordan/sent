@@ -52,7 +52,7 @@ const SideBar = () => {
   }, []);
 
   return (
-    <div className="relative flex h-full w-full max-w-[800px] flex-col items-start overflow-auto px-2">
+    <div className="relative flex h-full w-full max-w-[800px] flex-col items-start overflow-auto border-x px-2">
       {is_new_message_visible ? (
         <NewMessage />
       ) : (
